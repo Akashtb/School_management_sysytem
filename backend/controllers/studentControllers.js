@@ -4,6 +4,20 @@ import { createError } from "../utils/error";
 export const createStudent = async(req,res,next)=>{
     try {
         const newStudent = new Student(req.body);
+        const feeDetails = [
+            { feeType: 'First Term', amount: 1000 },
+            { feeType: 'Second Term', amount: 1000 },
+            { feeType: 'Third Term', amount: 1000 },
+            { feeType: 'Exam Fee', amount: 500 },
+        ];
+
+        const feesEntries = feeDetails.map((fee) => ({
+            ...fee,
+            studentId: newStudent._id,
+            status: 'Unpaid',
+        }));
+
+        await FeesHistory.insertMany(feesEntries);
         await newStudent.save();
         res.status(201).json({message:"Student created successfully",data:newStudent});
     } catch (error) {
@@ -58,9 +72,15 @@ export const deleteStudent = async(req,res,next)=>{
     try {
         const studentId = req.params.id;
         const deletedStudent = await Student.findByIdAndDelete(studentId);
+        
         if (!deletedStudent) {
             return next(createError(404,'Student not found'));
         }
+
+        await FeesHistory.deleteMany({ studentId });
+
+        await LibraryHistory.deleteMany({ studentId });
+
         res.status(200).json({ message: 'Student deleted successfully' });
     } catch (error) {
         console.error('Error deleting student:', error);

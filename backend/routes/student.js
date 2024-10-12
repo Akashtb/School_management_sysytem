@@ -1,4 +1,4 @@
-import { createStudent, deleteStudent, getAllStudents, getStudentsById, updateStudent } from "../controllers/studentcontrollers";
+import { createStudent, deleteStudent, getAllStudents, getStudentsById, updateStudent } from "../controllers/studentControllers";
 import express from ("express");
 import { verifyAdmin } from "../utils/verifyToken";
 
