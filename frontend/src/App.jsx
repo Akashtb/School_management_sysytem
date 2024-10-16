@@ -1,4 +1,4 @@
-import './App.css';
+import './styles/styles.scss';
 import Home from './pages/home/Home';
 import {
   createBrowserRouter,
@@ -10,6 +10,13 @@ import Products from './pages/products/Products';
 import Menu from './components/menu/Menu';
 import Footer from './components/footer/Footer';
 import Navbar from './components/navbar/Navbar';
+import Login from './pages/login/Login';
+import Student from './pages/student/Student';
+import UserView from './pages/userView/UserView';
+import StudentView from './pages/studentView/StudentView';
+import FeeHistory from './pages/FeesHistory/FeeHistory';
+import LibraryHistory from './pages/LibraryHistory/LibraryHistory';
+
 
 function App() {
 
@@ -34,18 +41,38 @@ function App() {
       element:<Layout/>,
       children:[
         {
-          path: "/",
+          path: "/home",
           element: <Home/>
         },
         {
-          path: "users",
+          path: "/users",
           element: <User/>
         },
         {
-          path: "about",
-          element: <Products/>
-        }
+          path: "/students",
+          element: <Student/>
+        },
+        {
+          path: "/users/view/:id",
+          element: <UserView/>
+        },
+        {
+          path: "/students/view/:id",
+          element: <StudentView/>
+        },
+        {
+          path: "/feeHistory",
+          element: <FeeHistory/>
+        },
+        {
+          path: "/libraryHistory",
+          element: <LibraryHistory/>
+        },
       ]
+    },
+    {
+      path:'/login',
+      element:<Login/>
     }
   ]);
 

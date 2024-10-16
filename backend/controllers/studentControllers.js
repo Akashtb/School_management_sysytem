@@ -1,23 +1,9 @@
-import Student from "../models/Student";
-import { createError } from "../utils/error";
+import Student from "../models/Student.js";
+import { createError } from "../utils/error.js";
 
 export const createStudent = async(req,res,next)=>{
     try {
         const newStudent = new Student(req.body);
-        const feeDetails = [
-            { feeType: 'First Term', amount: 1000 },
-            { feeType: 'Second Term', amount: 1000 },
-            { feeType: 'Third Term', amount: 1000 },
-            { feeType: 'Exam Fee', amount: 500 },
-        ];
-
-        const feesEntries = feeDetails.map((fee) => ({
-            ...fee,
-            studentId: newStudent._id,
-            status: 'Unpaid',
-        }));
-
-        await FeesHistory.insertMany(feesEntries);
         await newStudent.save();
         res.status(201).json({message:"Student created successfully",data:newStudent});
     } catch (error) {
@@ -33,7 +19,7 @@ export const getAllStudents = async(req,res,next)=>{
         res.status(200).json(Allstudents);
     } catch (error) {
         console.error('Failed to fetch all students:', error);
-        return next(createError(500, "Failed to fetch all students"));
+        return next();
     }
 }
 

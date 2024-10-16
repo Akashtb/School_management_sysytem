@@ -1,5 +1,5 @@
 import express from 'express'
-import { createLibraryRecord, deleteLibraryRecordOfAStudent, getAllLibraryRecordsOfAStudent, getLibraryRecordById, updateLibraryRecordOfAStudent } from '../controllers/libraryController'
+import { createLibraryRecord, deleteLibraryRecordOfAStudent, getAllLibraryRecordsOfAStudent, getLibraryRecordById, updateLibraryRecordOfAStudent } from '../controllers/libraryController.js'
 const router = express.Router()
 
 

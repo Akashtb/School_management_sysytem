@@ -1,0 +1,68 @@
+.navBar {
+    width: 100%;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.logo{
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-around;
+    font-weight: bold;
+    gap: 10px;
+}
+
+.logoIcon {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    color: aliceblue;
+}
+
+.icons {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+
+    .Icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .user {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+
+        img {
+            width: 26px;
+            height: 26px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+    }
+
+    .notification{
+        position: relative;
+        .notificationCount{
+            position: absolute;
+            background-color: rgb(227, 47, 47);
+            color: white;
+            border-radius: 50%;
+            width: 17px;
+            height: 17px;
+            text-align: center;
+            top: -10px;
+            right: -10px;
+            font-size: 12px;
+        }
+       
+    }
+
+
+
+}
+

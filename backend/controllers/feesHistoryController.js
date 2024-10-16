@@ -1,5 +1,5 @@
-import FeesHistory from "../models/FeesHistory";
-import { createError } from "../utils/error";
+import FeesHistory from "../models/FeesHistory.js";
+import { createError } from "../utils/error.js";
 
 
 export const getAllFeesRecordsOfAStudent = async (req, res, next) => {

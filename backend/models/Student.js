@@ -6,24 +6,13 @@ const studentSchema = new mongoose.Schema({
     age: { type: Number, required: true },
     gender: { type: String, required: true, enum: ['Male', 'Female', 'Other'] },
     dateOfBirth: { type: Date, required: true },
-    qualification: { type: String, required: true },
-    username: { type: String, required: true, unique: true },
-    email: { type: String, required: true, unique: true },
-    phoneNumber: { type: String, required: true },
-    address: {
-        street: { type: String },
-        city: { type: String, required: true },
-        state: { type: String, required: true },
-        zipCode: { type: String }
-    },
+    address: { type: String },
     class: { type: String, required: true },
-    enrollmentDate: { type: Date, default: Date.now }, 
-    guardianDetails: {
-        name: { type: String, required: true },
-        relationship: { type: String, required: true },
-        contactNumber: { type: String, required: true },
-        email: { type: String }
-    }
+    enrollmentDate: { type: Date, default: Date.now },
+    guardianName: { type: String, required: true },
+    guardianRelationship: { type: String, required: true },
+    guardianContactNumber: { type: String, required: true },
+    guardianEmail: { type: String }
 }, { timestamps: true });
 
 const Student = mongoose.model('Student', studentSchema);

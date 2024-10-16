@@ -4,6 +4,7 @@ import bodyParser from "body-parser"
 import cors from "cors";
 import mongoose from "mongoose";
 import authRoute from "./routes/auth.js"
+import studentAuth from "./routes/student.js"
 
 const app = express()
 
@@ -15,7 +16,7 @@ app.use(bodyParser.json());
 dotenv.config();
 
 const corsOptions = {
-    origin: process.env.CORS,
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true,
@@ -28,7 +29,8 @@ mongoose.connect(process.env.MONGO_URL)
   .catch((err) => console.error(err));
 
 
-app.use("/api/auth",authRoute)
+app.use("/api/auth",authRoute);
+app.use("/api/student",studentAuth);
 app.use((err, req, res, next) => {
     const errorStatus = err.status || 500;
     const errorMessage = err.message || "Something went Wrong"

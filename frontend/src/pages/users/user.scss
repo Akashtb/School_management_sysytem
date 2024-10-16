@@ -1,0 +1,21 @@
+.user{
+    .info{
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        margin-bottom: 20px;
+    }
+
+    button{
+        padding: 8px;
+        font-size: 16px;
+
+        // &:hover{
+        //     background-color: rgb(107, 107, 124);
+        //     color: antiquewhite;
+        //     border: none;
+        //     padding: 10px;
+        //     font-size: 16px;
+        // }
+    }
+}

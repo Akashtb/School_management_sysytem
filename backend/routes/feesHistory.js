@@ -1,5 +1,5 @@
 import express from 'express';
-import { deleteFeesRecordOfAStudents, getAllFeesRecordsOfAStudent, getFeesRecordById, updateFeesRecordOfAStudent } from '../controllers/feesHistoryController';
+import { deleteFeesRecordOfAStudents, getAllFeesRecordsOfAStudent, getFeesRecordById, updateFeesRecordOfAStudent } from '../controllers/feesHistoryController.js';
 const router = express.Router();
 
 

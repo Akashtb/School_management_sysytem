@@ -1,0 +1,50 @@
+@import '../../styles/variables.scss';
+.recentStudent {
+    h1 {
+        margin-bottom: 20px;
+    }
+
+    .list {
+        .listItems {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 30px;
+
+            .user {
+                display: flex;
+                gap: 10px;
+
+                img {
+                    width: 40px;
+                    height: 40px;
+                    border-radius: 50%;
+                    object-fit: cover;
+
+                }
+
+                .userDetails {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 5px;
+                    .username {
+                        font-size: 14px;
+                        font-weight: 500;
+                    }
+
+                    .email {
+                        font-size: 12px;
+                        font-weight: 500;
+                    }
+                }
+            }
+            .class {}
+
+            &:hover{
+                background-color: $soft-bg
+            }
+
+            
+        }
+    }
+}

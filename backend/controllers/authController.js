@@ -66,7 +66,7 @@ export const Login = async (req, res, next) => {
             httpOnly: true,
             secure: true,
             maxAge: 7 * 24 * 60 * 60 * 1000
-        }).status(201).json({ message: "login successful", otherDetails, accessToken: accessToken });
+        }).status(201).json({ message: "login successful", accessToken: accessToken,role:otherDetails.role });
     } catch (err) {
         res.status(500).json(error)
     }
