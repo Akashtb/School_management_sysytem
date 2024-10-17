@@ -20,6 +20,8 @@ import Welcome from './features/auth/Welcome';
 import SingleLibrary from './pages/SingleLibraryHistory/SingleLibrary';
 import SingleFee from './pages/SingleFeeHistory/SingleFee';
 import Edit from './components/StudentEdit/StudentEdit';
+import EditLibrary from './components/EditLibrary/EditLibrary';
+import EditProfile from './pages/EditProfile/EditProfile';
 
 function Layout() {
   return (
@@ -84,12 +86,24 @@ function App() {
           element: <SingleLibrary />
         },
         {
-          path: "users/edit/:id",
+          path: "/users/edit/:id",
           element: <Edit />
         },
         {
-          path: "students/edit/:id",
+          path: "/students/edit/:id",
           element: <Edit />
+        },
+        {
+          path: "/StudentLibrary/edit/1",
+          element: <EditLibrary/>
+        },
+        {
+          path: "/StudentLibrary/edit/1",
+          element: <EditLibrary/>
+        },
+        {
+          path: "/myProfile",
+          element: <EditProfile/>
         },
       ]
     },

@@ -5,7 +5,7 @@ const feesHistorySchema = new mongoose.Schema({
     feeType: { type: String, required: true }, 
     amount: { type: Number, required: true },
     paymentDate: { type: Date, default: Date.now },
-    status: { type: String, enum: ['Paid', 'Unpaid'], default: 'Unpaid' },
+    status: { type: String, enum: ['Cleared', 'Due']},
     remarks: { type: String }
 }, { timestamps: true });
 

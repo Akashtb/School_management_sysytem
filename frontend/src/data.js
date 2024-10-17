@@ -13,7 +13,7 @@ export const menu = [
         {
           id: 2,
           title: "Profile",
-          url: "/users/1",
+          url: "/myProfile",
           icon: {profile},
         },
       ],
@@ -945,4 +945,97 @@ export const menu = [
       }
     }
   ]
+
+
+  export const FeesHistory = [
+    {
+      "id": 1,
+      "studentId": 1,
+      "feeType": "Library",
+      "amount": 847,
+      "paymentDate": "2023-03-15T14:22:55.195Z",
+      "status": "Cleared",
+      "remarks": "Remark for student 1, fee type 1"
+    },
+    {
+      "id": 2,
+      "studentId": 1,
+      "feeType": "Tuition",
+      "amount": 299,
+      "paymentDate": "2022-10-21T14:22:55.195Z",
+      "status": "Due",
+      "remarks": "Remark for student 1, fee type 2"
+    },
+    {
+      "id": 3,
+      "studentId": 2,
+      "feeType": "Examination",
+      "amount": 432,
+      "paymentDate": "2021-05-30T14:22:55.195Z",
+      "status": "Cleared",
+      "remarks": "Remark for student 2, fee type 1"
+    },
+    {
+      "id": 4,
+      "studentId": 2,
+      "feeType": "Activity",
+      "amount": 765,
+      "paymentDate": "2020-12-11T14:22:55.195Z",
+      "status": "Due",
+      "remarks": "Remark for student 2, fee type 2"
+    },
+    {
+      "id": 5,
+      "studentId": 3,
+      "feeType": "Tuition",
+      "amount": 892,
+      "paymentDate": "2019-08-02T14:22:55.195Z",
+      "status": "Cleared",
+      "remarks": "Remark for student 3, fee type 1"
+    }
+  ];
+
+  
+  export const StudentLibrary = [
+    {
+      "id": 1, // Change _id to id
+      "studentId": 1,
+      "bookName": "To Kill a Mockingbird",
+      "borrowDate": "2023-01-05",
+      "returnDate": "2023-02-05",
+      "status": "Returned"
+    },
+    {
+      "id": 2, // Change _id to id
+      "studentId": 1,
+      "bookName": "1984",
+      "borrowDate": "2023-03-01",
+      "returnDate": null,
+      "status": "Borrowed"
+    },
+    {
+      "id": 3, // Change _id to id
+      "studentId": 2,
+      "bookName": "The Great Gatsby",
+      "borrowDate": "2022-11-10",
+      "returnDate": "2022-12-10",
+      "status": "Returned"
+    },
+    {
+      "id": 4, // Change _id to id
+      "studentId": 2,
+      "bookName": "Moby Dick",
+      "borrowDate": "2023-04-15",
+      "returnDate": null,
+      "status": "Borrowed"
+    },
+    {
+      "id": 5, // Change _id to id
+      "studentId": 3,
+      "bookName": "Pride and Prejudice",
+      "borrowDate": "2023-02-12",
+      "returnDate": "2023-03-12",
+      "status": "Returned"
+    }
+  ];
   

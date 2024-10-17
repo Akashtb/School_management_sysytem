@@ -146,7 +146,7 @@ const columns = [
 const Student = () => {
   const [open, SetOpen] = useState(false);  
   const [openEdit, SetOpenEdit] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null); // To store the selected row data
+  const [selectedRow, setSelectedRow] = useState(null); 
   const { data: users, error, isLoading } = useGetUsersQuery();
   console.log(users);
 

@@ -1,10 +1,9 @@
 import { topDealUsers } from '../../data';
-import './recentstudent.scss';
-topDealUsers
-const RecentStudents = () => {
-    return (
-        <div className='recentStudent'>
-            <h1>Recent Students</h1>
+import './RecentUser.scss';
+const RecentUser = () => {
+  return (
+    <div className='RecentUser'>
+             <h1>Recent Users</h1>
             <div className="list">
                 {topDealUsers.map(user => (
                     <div className="listItems" key={user.id}>
@@ -19,8 +18,8 @@ const RecentStudents = () => {
                     </div>
                 ))}
             </div>
-        </div>
-    )
+    </div>
+  )
 }
 
-export default RecentStudents
+export default RecentUser

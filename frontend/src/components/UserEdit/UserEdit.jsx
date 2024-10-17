@@ -9,15 +9,15 @@ const UserEdit = (props) => {
 
    
     useEffect(() => {
-        if (props.rowData) {
-            setFormData(props.rowData); // Pre-populate form with selected row data
+        if (props.rowData) { 
+            setFormData(props.rowData); 
         }
     }, [props.rowData]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
         console.log(formData);
-        props.SetOpenEdit(false); // Close the modal on submit
+        props.SetOpenEdit(false); 
     };
 
     const handleImageChange = (e) => {
@@ -38,7 +38,7 @@ const UserEdit = (props) => {
     return (
         <div className='UserEdit'>
             <div className="modal">
-                <span className="close" onClick={() => props.SetOpenEdit(false)}>X</span> {/* Close modal on click */}
+                <span className="close" onClick={() => props.SetOpenEdit(false)}>X</span> 
                 <h1>Edit {props.slug}</h1>
                 <form onSubmit={handleSubmit}>
                     <div className="avatar-container">
@@ -72,7 +72,7 @@ const UserEdit = (props) => {
                                     <div className="input-item" key={column.field}>
                                         <select
                                             name="gender"
-                                            value={formData.gender || ''} // Prepopulate the gender field
+                                            value={formData.gender || ''} 
                                             onChange={handleInputChange}
                                         >
                                             <option value="" disabled>Select Gender</option>
@@ -89,7 +89,7 @@ const UserEdit = (props) => {
                                     <div className="input-item" key={column.field}>
                                         <select
                                             name="class"
-                                            value={formData.class || ''} // Prepopulate the class field
+                                            value={formData.class || ''} 
                                             onChange={handleInputChange}
                                         >
                                             <option value="" disabled>Select Class</option>
@@ -101,7 +101,6 @@ const UserEdit = (props) => {
                                 );
                             }
 
-                            // Default input for other fields
                             return (
                                 column.field !== "Avatar" && (
                                     <div className="input-item" key={column.field}>
@@ -109,7 +108,7 @@ const UserEdit = (props) => {
                                             type={column.type || 'text'} 
                                             name={column.field}
                                             placeholder={column.headerName || column.field}
-                                            value={formData[column.field] || ''} // Prepopulate the other fields
+                                            value={formData[column.field] || ''} 
                                             onChange={handleInputChange}
                                         />
                                     </div>
