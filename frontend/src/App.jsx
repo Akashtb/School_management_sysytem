@@ -20,27 +20,28 @@ import Welcome from './features/auth/Welcome';
 import SingleLibrary from './pages/SingleLibraryHistory/SingleLibrary';
 import SingleFee from './pages/SingleFeeHistory/SingleFee';
 import Edit from './components/StudentEdit/StudentEdit';
-function App() {
-  const Layout = () => {
-    return (
-      <div className="main">
-        <Navbar />
-        <div className="container">
-          <div className="menuContainer">
-            <Menu />
-          </div>
-          <div className="contentContainer">
-            <Outlet />
-          </div>
-        </div>
-        <Footer />
-      </div>
-    );
-  };
 
+function Layout() {
+  return (
+    <div className="main">
+      <Navbar />
+      <div className="container">
+        <div className="menuContainer">
+          <Menu />
+        </div>
+        <div className="contentContainer">
+          <Outlet />
+        </div>
+      </div>
+      <Footer />
+    </div>
+  );
+}
+
+function App() {
   const router = createBrowserRouter([
     {
-      element: <Layout />,
+      element: <RequireAuth/>, 
       children: [
         {
           path: "/home",
@@ -49,7 +50,6 @@ function App() {
         {
           path: "/welcome",
           element: <Welcome />
-  
         },
         {
           path: "/users",
@@ -65,11 +65,11 @@ function App() {
         },
         {
           path: "/students/view/:id",
-          element:<StudentView />
+          element: <StudentView />
         },
         {
           path: "/feeHistory",
-          element:<FeeHistory /> 
+          element: <FeeHistory /> 
         },
         {
           path: "/libraryHistory",
@@ -77,19 +77,19 @@ function App() {
         },
         {
           path: "/singleFee/:id",
-          element: <SingleFee/>
+          element: <SingleFee />
         },
         {
           path: "/singleLibrary/:id",
-          element: <SingleLibrary/>
+          element: <SingleLibrary />
         },
         {
           path: "users/edit/:id",
-          element: <Edit/>
+          element: <Edit />
         },
         {
           path: "students/edit/:id",
-          element: <Edit/>
+          element: <Edit />
         },
       ]
     },
