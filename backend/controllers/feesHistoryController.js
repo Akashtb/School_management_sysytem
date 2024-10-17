@@ -10,7 +10,7 @@ export const getAllFeesRecordsOfAStudent = async (req, res, next) => {
         res.status(200).json(feesRecords);
     } catch (error) {
         console.error('Error fetching fees records:', error);
-        return next(createError(500, "Failed to fetch fees records"));
+        // return next(createError(500, "Failed to fetch fees records"));
     }
 };
 
@@ -24,7 +24,7 @@ export const getFeesRecordById = async (req, res, next) => {
         res.status(200).json(feesRecord);
     } catch (error) {
         console.error('Error fetching fees record:', error);
-        return next(createError(500, "Failed to fetch fees record"));
+        // return next(createError(500, "Failed to fetch fees record"));
     }
 };
 
@@ -39,7 +39,7 @@ export const updateFeesRecordOfAStudent = async (req, res, next) => {
         res.status(200).json({ message: 'Fees record updated successfully', data: updatedFeesRecord });
     } catch (error) {
         console.error('Error updating fees record:', error);
-        return next(createError(500, "Failed to update fees record"));
+        // return next(createError(500, "Failed to update fees record"));
     }
 };
 
@@ -54,6 +54,6 @@ export const deleteFeesRecordOfAStudents = async (req, res, next) => {
         res.status(200).json({ message: 'Fees record deleted successfully' });
     } catch (error) {
         console.error('Error deleting fees record:', error);
-        return next(createError(500, "Failed to delete fees record"));
+        // return next(createError(500, "Failed to delete fees record"));
     }
 };

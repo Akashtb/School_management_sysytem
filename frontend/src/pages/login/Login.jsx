@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import './Login.scss';
 import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
-
+import { useLoginMutation } from '../../features/auth/AuthApiSlice';
+import { setCredentials } from '../../features/auth/AuthSLice';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [emailError, setEmailError] = useState('');
   const [passwordError, setPasswordError] = useState('');
-  const [isSubmitted, setIsSubmitted] = useState(false);
-  const dispatch = useDispatch()
-  const navigate = useNavigate()
+  const [loginError, setLoginError] = useState(''); // State for login error
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const [login] = useLoginMutation(); // Call useLoginMutation here
 
   const validateEmail = (email) => {
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
@@ -23,7 +25,6 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     let isValid = true;
 
     if (!validateEmail(email)) {
@@ -42,13 +43,18 @@ const Login = () => {
 
     if (isValid) {
       try {
-        // try to implemet the redux
+        const userData = await login({ email, password }).unwrap();
+        console.log(userData);
+        
+        dispatch(setCredentials({ ...userData }));
+        navigate('/home'); 
       } catch (error) {
-        console.error('Error logging in:', error.response?.data || error.message);
+        setLoginError(error?.data?.message || 'Login failed, please try again.');
+        console.error('Error logging in:', error);
       }
     }
   };
- 
+
   return (
     <div className="loginContainer">
       <form className="loginForm" onSubmit={handleSubmit}>
@@ -75,8 +81,9 @@ const Login = () => {
             placeholder="Enter your password"
             required
           />
-          {passwordError && <p className="errorMessage">{passwordError}</p>}
+          {passwordError && <p className="error-message">{passwordError}</p>}
         </div>
+        {loginError && <p className="error-message">{loginError}</p>} 
         <button type="submit" className="loginButton">Login</button>
       </form>
     </div>

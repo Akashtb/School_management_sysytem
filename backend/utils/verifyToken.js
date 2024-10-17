@@ -21,22 +21,21 @@ export const verifyToken = (req,res,next)=>{
 }
 
 
-  export const verifyAdmin = (req, res, next) => {
-    verifyToken(req, res, () => {      
-      if (req.user.role === "Admin") {
-        next()
+export const verifyAdmin = (req, res, next) => {
+  verifyToken(req, res, () => {      
+      if (req.user && req.user.role === "Admin") {
+          next();
       } else {
-        return next(
-          createError(403, 'You are not an admin to perform this operation.')
-        )
+          return next(createError(403, 'You are not an admin to perform this operation.'));
       }
-    })
-  }
+  });
+};
+
 
 
   export const verifyOfficeStaff = (req, res, next) => {
     verifyToken(req, res, () => {
-      if (req.role === "Office Staff") {
+      if (req.user && req.user.role === "Office Staff") {
         next()
       } else {
         return next(
@@ -48,7 +47,7 @@ export const verifyToken = (req,res,next)=>{
 
   export const verifyLibrarian = (req, res, next) => {
     verifyToken(req, res, () => {
-      if (req.role === "Librarian") {
+      if (req.user && req.user.role === "Librarian") {
         next()
       } else {
         return next(

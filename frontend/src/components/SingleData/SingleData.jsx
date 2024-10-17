@@ -1,17 +1,10 @@
+import React from 'react'
 import { AiOutlineDelete, AiOutlineEdit, AiOutlineEye } from 'react-icons/ai';
-import './datatable.scss';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Link } from "react-router-dom";
 
-const DataTable = (props) => {
+const SingleData = () => {
 
-    const handleDelete = (id) => {
-        console.log("ID has been deleted:", id);
-    }
-
-    const handleEditClick = (rowData) => {
-        props.SetOpenEdit(true, rowData); // Pass the row data to the parent component
-    };
 
     const actionColumn = {
         field: "action",
@@ -26,11 +19,9 @@ const DataTable = (props) => {
                         </Link>
                     </div>
                     <div className='edit'>
-                        <AiOutlineEdit 
-                            size={20} 
-                            style={{ cursor: 'pointer', color: '#28A745' }} 
-                            onClick={() => handleEditClick(params.row)} // Pass the row data when clicked
-                        />
+                        <Link to={`/${props.slug}/edit/${params.row.id}`}>
+                            <AiOutlineEdit size={20} style={{ cursor: 'pointer', color: '#28A745' }} />
+                        </Link>
                     </div>
                     <div className='delete' onClick={() => handleDelete(params.row.id)}>
                         <AiOutlineDelete size={20} style={{ cursor: 'pointer', color: '#DC3545' }} />
@@ -39,15 +30,12 @@ const DataTable = (props) => {
             );
         }
     }
-
-    const filteredColumns = props.columns.filter(column => column.field !== 'password' && column.field !== 'guardianRelationship' && column.field !== 'guardianEmail');
-
-    return (
-        <div className='dataTable'>
-            <DataGrid
+  return (
+    <div className='SingleData'>
+         <DataGrid
                 className='dataGrid'
                 rows={props.rows}
-                columns={[...filteredColumns, actionColumn]}
+                columns={[...props.columns, actionColumn]}
                 initialState={{
                     pagination: {
                         paginationModel: {
@@ -71,8 +59,8 @@ const DataTable = (props) => {
                 disableDensitySelector
                 disableColumnSelector
             />
-        </div>
-    );
+    </div>
+  )
 }
 
-export default DataTable;
+export default SingleData

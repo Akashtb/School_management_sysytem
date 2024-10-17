@@ -52,7 +52,7 @@ const columns = [
     },
     {
         field: 'class',
-        headerName: 'Class',
+        headerName: 'Class', 
         width: 100,
         editable: true,
     },
@@ -75,7 +75,7 @@ const FeeHistory = () => {
           <div className="info">
                 <h1>Students</h1>
             </div>
-            <RecordList slug="students" columns={columns} rows={studentDetails} />
+            <RecordList slug="students" columns={columns} rows={studentDetails} nav="singleFee"/>
     </div>
   )
 }

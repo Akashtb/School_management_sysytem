@@ -75,6 +75,7 @@ export const Login = async (req, res, next) => {
 
 export const refreshToken = (req, res, next) => {
     const { refreshToken } = req.cookies;
+    
     if (!refreshToken) return next(createError(401, "No refresh token"));
 
     jwt.verify(refreshToken, process.env.JWT, (err, user) => {

@@ -2,6 +2,7 @@ import express from "express";
 import dotenv from "dotenv";
 import bodyParser from "body-parser"
 import cors from "cors";
+import cookieParser from 'cookie-parser';
 import mongoose from "mongoose";
 import authRoute from "./routes/auth.js"
 import studentAuth from "./routes/student.js"
@@ -11,6 +12,7 @@ const app = express()
 
 app.use(express.json());
 app.use(bodyParser.json());
+app.use(cookieParser());
 
 
 dotenv.config();

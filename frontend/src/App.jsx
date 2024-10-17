@@ -6,7 +6,6 @@ import {
   Outlet
 } from "react-router-dom";
 import User from './pages/users/User';
-import Products from './pages/products/Products';
 import Menu from './components/menu/Menu';
 import Footer from './components/footer/Footer';
 import Navbar from './components/navbar/Navbar';
@@ -16,69 +15,93 @@ import UserView from './pages/userView/UserView';
 import StudentView from './pages/studentView/StudentView';
 import FeeHistory from './pages/FeesHistory/FeeHistory';
 import LibraryHistory from './pages/LibraryHistory/LibraryHistory';
-
-
+import RequireAuth from './features/auth/RequireAuth';
+import Welcome from './features/auth/Welcome';
+import SingleLibrary from './pages/SingleLibraryHistory/SingleLibrary';
+import SingleFee from './pages/SingleFeeHistory/SingleFee';
+import Edit from './components/StudentEdit/StudentEdit';
 function App() {
-
-  const Layout = ()=>{
-    return(
+  const Layout = () => {
+    return (
       <div className="main">
-        <Navbar/>
+        <Navbar />
         <div className="container">
           <div className="menuContainer">
-            <Menu/>
+            <Menu />
           </div>
           <div className="contentContainer">
-            <Outlet/>
+            <Outlet />
           </div>
         </div>
-        <Footer/>
+        <Footer />
       </div>
-    )
-  }
+    );
+  };
+
   const router = createBrowserRouter([
-    {path:"/",
-      element:<Layout/>,
-      children:[
+    {
+      element: <Layout />,
+      children: [
         {
           path: "/home",
-          element: <Home/>
+          element: <Home />
+        },
+        {
+          path: "/welcome",
+          element: <Welcome />
+  
         },
         {
           path: "/users",
-          element: <User/>
+          element: <User /> 
         },
         {
           path: "/students",
-          element: <Student/>
+          element: <Student />
         },
         {
           path: "/users/view/:id",
-          element: <UserView/>
+          element: <UserView /> 
         },
         {
           path: "/students/view/:id",
-          element: <StudentView/>
+          element:<StudentView />
         },
         {
           path: "/feeHistory",
-          element: <FeeHistory/>
+          element:<FeeHistory /> 
         },
         {
           path: "/libraryHistory",
-          element: <LibraryHistory/>
+          element: <LibraryHistory />
+        },
+        {
+          path: "/singleFee/:id",
+          element: <SingleFee/>
+        },
+        {
+          path: "/singleLibrary/:id",
+          element: <SingleLibrary/>
+        },
+        {
+          path: "users/edit/:id",
+          element: <Edit/>
+        },
+        {
+          path: "students/edit/:id",
+          element: <Edit/>
         },
       ]
     },
     {
-      path:'/login',
-      element:<Login/>
+      path: '/login',
+      element: <Login />
     }
   ]);
 
   return (
-    <RouterProvider router={router}/>
-  )
+    <RouterProvider router={router} />
+  );
 }
 
-export default App
+export default App;
