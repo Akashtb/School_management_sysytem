@@ -7,6 +7,8 @@ import Edit from '../../components/StudentEdit/StudentEdit';
 import UserEdit from '../../components/UserEdit/UserEdit';
 import { useGetAllUsersExceptCurrentUserQuery } from '../../features/users/userApiSlice';
 import { noAvatar } from '../../assets/image';
+import { selectCurrentRole } from '../../features/auth/AuthSLice';
+import { useSelector } from 'react-redux';
 const columns = [
   {
     field: 'avatar', headerName: 'Avatar', width: 80,
@@ -73,54 +75,60 @@ const columns = [
     editable: true,
     renderEditCell: (params) => (
       <select
-        defaultValue={params.value} 
-        style={{ width: '100%', height: '100%' }} 
+        defaultValue={params.value}
+        style={{ width: '100%', height: '100%' }}
         onChange={(e) => {
           params.api.updateRowData({
             update: [{ ...params.row, role: e.target.value }],
           });
         }}
       >
-        <option value="" disabled>Select</option> 
+        <option value="" disabled>Select</option>
         <option value="Admin">Admin</option>
         <option value="Office Staff">Office Staff</option>
         <option value="Librarian">Librarian</option>
       </select>
     ),
   },
-  
 
-  
+
+
 
 ];
 
 const User = () => {
-  const [open, SetOpen] = useState(false);  
+  const [open, SetOpen] = useState(false);
   const [openEdit, SetOpenEdit] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null); 
-  const { data: users, isLoading, isError ,refetch} = useGetAllUsersExceptCurrentUserQuery();
+  const [selectedRow, setSelectedRow] = useState(null);
+  const role = useSelector(selectCurrentRole);
+  const { data: users, isLoading, isError, refetch } = useGetAllUsersExceptCurrentUserQuery();
 
   useEffect(() => {
     refetch();
-}, []);
+  }, []);
 
-  console.log(users);
-  
+  console.log(role, "role in user page");
+  console.log("user component is render");
 
 
+  const handleOpenAdd = () => {
+    SetOpen(true);
+  };
   const handleOpenEdit = (isOpen, rowData = null) => {
     SetOpenEdit(isOpen);
-    setSelectedRow(rowData); 
-};
+    setSelectedRow(rowData);
+  };
   return (
     <div className='user'>
       <div className="info">
         <h1>Users</h1>
-        <button onClick={()=>SetOpen(true)}>Add New User</button>
+        {role === 'Admin' && (
+          <button onClick={handleOpenAdd}>Add New User</button>
+        )}
       </div>
-      <DataTable slug="users" columns={columns} rows={users} SetOpenEdit={handleOpenEdit} refetch={refetch}/>
-      {open && <Add slug="user" columns={columns} SetOpen={SetOpen} refetch={refetch}/>}
-      {openEdit && <UserEdit slug="users" columns={columns} SetOpenEdit={handleOpenEdit} rowData={selectedRow} refetch={refetch}/>} {/* Pass the selected rowData */}
+      <DataTable slug="users" columns={columns} rows={users} SetOpenEdit={handleOpenEdit} refetch={refetch} />
+      {open && <Add slug="user" columns={columns} SetOpen={SetOpen} refetch={refetch} />}
+      {openEdit && <UserEdit slug="users" columns={columns} SetOpenEdit={handleOpenEdit} rowData={selectedRow} refetch={refetch} />} {/* Pass the selected rowData */}
     </div>
   )
 }

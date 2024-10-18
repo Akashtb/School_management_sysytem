@@ -14,7 +14,7 @@ const AdminMenu = () => {
           <img src={homeIcon} alt="" />
           <span className="listItemTitle">Home Page</span>
         </Link>
-        <Link to="/home" className="listItem" >
+        <Link to="/myProfile" className="listItem" >
           <img src={profile} alt="" />
           <span className="listItemTitle">Profile</span>
         </Link>
@@ -22,11 +22,11 @@ const AdminMenu = () => {
     </div>
     <div className="item">
       <span className="title">List</span>
-        <Link to="" className="listItem" >
+        <Link to="/users" className="listItem" >
           <img src={user} alt="" />
           <span className="listItemTitle">User List</span>
         </Link>
-        <Link to="" className="listItem" >
+        <Link to="/students" className="listItem" >
           <img src={user} alt="" />
           <span className="listItemTitle">Student List</span>
         </Link>
@@ -35,11 +35,11 @@ const AdminMenu = () => {
 
     <div className="item">
       <span className="title">Record History</span>
-        <Link to="" className="listItem" >
-          <img src={homeIcon} alt="" />
+        <Link to="/feeHistory" className="listItem" >
+          <img src={user} alt="" />
           <span className="listItemTitle">Fees History</span>
         </Link>
-        <Link to="" className="listItem" >
+        <Link to="/libraryHistory" className="listItem" >
           <img src={user} alt="" />
           <span className="listItemTitle">Library History</span>
         </Link>

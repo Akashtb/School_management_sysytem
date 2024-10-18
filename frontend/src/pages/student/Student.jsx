@@ -5,6 +5,8 @@ import Add from '../../components/Add/Add';
 import { useGetAllStudentsQuery } from '../../features/users/studentApiSlice';
 import { noAvatar } from '../../assets/image';
 import Edit from '../../components/StudentEdit/StudentEdit';
+import { useSelector } from 'react-redux';
+import { selectCurrentRole } from '../../features/auth/AuthSLice';
 
 const columns = [
     {
@@ -135,6 +137,8 @@ const Student = () => {
   const [openEdit, SetOpenEdit] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
   const { data: students, isLoading, isError ,refetch} = useGetAllStudentsQuery(); 
+  const role = useSelector(selectCurrentRole);
+
 
   console.log(students);
   
@@ -151,7 +155,9 @@ const Student = () => {
       <div className='Student'>
           <div className="info">
               <h1>Students</h1>
+              {role === 'Admin' && (
               <button onClick={() => SetOpen(true)}>Add New Student</button>
+            )}
           </div>
           <DataTable slug="students" columns={columns} rows={students} SetOpenEdit={handleOpenEdit} refetch={refetch} />
           {open && <Add slug="students" columns={columns} SetOpen={SetOpen} refetch={refetch}/>}

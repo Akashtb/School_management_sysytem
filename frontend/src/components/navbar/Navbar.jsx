@@ -1,5 +1,5 @@
 import './navbar.scss';
-import { logo, app, search, expand, notification, profilePic } from "../../assets/image.js";
+import { logo, app, search, expand, notification, profilePic, noAvatar } from "../../assets/image.js";
 import { FiLogOut } from 'react-icons/fi';
 import { useLogOutMutation } from '../../features/auth/AuthApiSlice.jsx';
 import { useNavigate } from 'react-router-dom';
@@ -30,15 +30,10 @@ const Navbar = () => {
         <span className='appName'>Padashala</span>
       </div>
       <div className="icons">
-        <img src={search} alt="" className='Icon' />
-        <img src={app} alt="" className='Icon' />
-        <img src={expand} alt="" className='Icon' />
-        <div className="notification">
-          <img src={notification} alt="" className='Icon' />
-          <span className='notificationCount'>1</span>
-        </div>
+
+       
         <div className="user">
-          <img src={profilePic} alt="" />
+          <img src={currentUser?.avatar || noAvatar} alt="" />
           <span>{`${currentUser?.firstName} ${currentUser?.lastName}`}</span>
         </div>
         <div className="logout" onClick={handleLogout}>

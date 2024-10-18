@@ -12,7 +12,6 @@ const EditProfile = () => {
         firstName: '',
         lastName: '',
         email: '',
-        bio: '',
         age: '',
         qualification: '',
     });
@@ -25,7 +24,6 @@ const EditProfile = () => {
                 firstName: currentUser.firstName || '',
                 lastName: currentUser.lastName || '',
                 email: currentUser.email || '',
-                bio: currentUser.bio || '',
                 age: currentUser.age || '',
                 qualification: currentUser.qualification || '',
             });
@@ -49,12 +47,14 @@ const EditProfile = () => {
     const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            const formData = new FormData();
-            formData.append('file', file);
-            uploadData.append('upload_preset', 'upload'); 
+            const uploadData = new FormData(); // Correctly define uploadData here
+            uploadData.append('file', file);
+            uploadData.append('upload_preset', 'upload');
 
             try {
                 const response = await axios.post('https://api.cloudinary.com/v1_1/dwtoizfsv/image/upload', uploadData);
+                console.log(response);
+                
                 const imageUrl = response.data.secure_url;
                 setImage(imageUrl);
                 toast.success('Image uploaded successfully');

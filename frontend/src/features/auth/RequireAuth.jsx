@@ -1,39 +1,38 @@
-import { useLocation, Navigate, useFetcher } from "react-router-dom";
+import { useLocation, Navigate, Outlet } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useState, useEffect } from "react";
-import Layout from "../../LayOut";
-import { selectCurrentToken } from "./AuthSLice";
+import Layout from "../../Layout";
+import { selectCurrentRole, selectCurrentToken } from "./AuthSLice";
+import { toast } from "react-toastify";
 
-const RequireAuth = () => {
+const RequireAuth = ({ allowedRoles }) => {
     const token = useSelector(selectCurrentToken);
     const location = useLocation();
-    const [isAuth, setIsAuth] = useState(!!token); 
     const [isLoading, setIsLoading] = useState(true);
+    const role = useSelector(selectCurrentRole);
 
-    console.log(token ,"token require auth");
-    
-  useEffect(()=>{
-    const timer = setTimeout(()=>{
-        if(token){
-            setIsAuth(false);
-        }else{
-            setIsAuth(true);
-        }
-        setIsLoading(false);
-    },100)
-    return () => clearTimeout(timer);
-  },[token])
+    useEffect(() => {
+        const timer = setTimeout(() => {
+            setIsLoading(false);
+        }, 100);
+        return () => clearTimeout(timer);
+    }, []);
 
-  if (isLoading) {
-    return <div>Loading...</div>; 
-  }
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
+    if (!token) {
+        return <Navigate to="/login" state={{ from: location }} replace />;
+    }
+
+    if (!allowedRoles.includes(role)) {
+        toast.error("Your are authorized to the route")
+        return <Navigate to="/home" replace />;
+    }
 
     return (
-        token ? (
-            <Layout/>
-        ) : (
-            <Navigate to="/login" state={{ from: location }} replace />
-        )
+       <Layout/>
     );
 };
 

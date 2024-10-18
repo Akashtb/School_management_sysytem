@@ -5,10 +5,14 @@ import { Link } from "react-router-dom";
 import { useDeleteUserMutation } from '../../features/users/userApiSlice';
 import { toast } from 'react-toastify';
 import { useDeleteStudentMutation } from '../../features/users/studentApiSlice';
+import { selectCurrentRole } from '../../features/auth/AuthSLice';
+import { useSelector } from 'react-redux';
 
 const DataTable = (props) => {
     const [deleteUser] = useDeleteUserMutation();
     const [deleteStudent] = useDeleteStudentMutation();
+    const role = useSelector(selectCurrentRole);
+
 
     const handleDelete = async (id) => {
         try {
@@ -36,7 +40,7 @@ const DataTable = (props) => {
     const actionColumn = {
         field: "action",
         headerName: "Action",
-        width: 100,
+        width: 150,
         renderCell: (params) => {
             return (
                 <div className="action" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
@@ -45,20 +49,24 @@ const DataTable = (props) => {
                             <AiOutlineEye size={20} style={{ cursor: 'pointer', color: '#007BFF' }} />
                         </Link>
                     </div>
-                    <div className='edit'>
-                        <AiOutlineEdit 
-                            size={20} 
-                            style={{ cursor: 'pointer', color: '#28A745' }} 
-                            onClick={() => handleEditClick(params.row)} 
-                        />
-                    </div>
-                    <div className='delete' onClick={() => handleDelete(params.row._id)}>
-                        <AiOutlineDelete size={20} style={{ cursor: 'pointer', color: '#DC3545' }} />
-                    </div>
-                </div> 
+                    {role === 'Admin' && (
+                        <>
+                            <div className='edit'>
+                                <AiOutlineEdit
+                                    size={20}
+                                    style={{ cursor: 'pointer', color: '#28A745' }}
+                                    onClick={() => handleEditClick(params.row)}
+                                />
+                            </div>
+                            <div className='delete' onClick={() => handleDelete(params.row._id)}>
+                                <AiOutlineDelete size={20} style={{ cursor: 'pointer', color: '#DC3545' }} />
+                            </div>
+                        </>
+                    )}
+                </div>
             );
         }
-    }
+    };
 
     const filteredColumns = props.columns.filter(column => column.field !== 'password' && column.field !== 'guardianRelationship' && column.field !== 'guardianEmail');
 
