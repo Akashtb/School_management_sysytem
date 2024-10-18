@@ -10,6 +10,11 @@ export const StudentApiSlice = apiSlice.injectEndpoints({
         getStudentById: builder.query({
             query: (id) => `/student/getSingleStudent/${id}`,
         }),
+        getRecentStudents: builder.query({
+            query: () => '/student/getRecentStudents',
+            keepUnusedDataFor: 0, 
+            refetchOnMountOrArgChange: true,
+        }),
         updateStudentDetail: builder.mutation({
             query: ({ id, studentData }) => ({
                 url: `/student/updateStudentDetail/${id}`,
@@ -37,6 +42,7 @@ export const StudentApiSlice = apiSlice.injectEndpoints({
 export const {
     useGetAllStudentsQuery,
     useGetStudentByIdQuery,
+    useGetRecentStudentsQuery,
     useUpdateStudentDetailMutation,
     useDeleteStudentMutation, 
     useCreateStudentMutation

@@ -10,6 +10,11 @@ export const usersApiSlice = apiSlice.injectEndpoints({
         getUserById: builder.query({
             query: (id) => `/auth/getUserById/${id}`,
         }),
+        getRecentUsers: builder.query({
+            query: () => '/auth/getRecentUser',
+            keepUnusedDataFor: 0,
+            refetchOnMountOrArgChange: true,
+        }),
         getCurrentUser: builder.query({ 
             query: () => '/auth/getCurrentUser',
             keepUnusedDataFor: 0, 
@@ -49,6 +54,7 @@ export const {
     useGetUsersQuery: useGetAllUsersExceptCurrentUserQuery,
     useGetUserByIdQuery,
     useGetCurrentUserQuery,
+    useGetRecentUsersQuery,
     useUpdateCurrentUserMutation,
     useUpdateUserMutation,
     useDeleteUserMutation,

@@ -83,3 +83,14 @@ export const deleteStudent = async(req,res,next)=>{
         res.status(500).json({ error: 'Failed to delete student' });
     }
 }
+
+
+export const getRecentStudents = async (req, res) => {
+    try {
+        const students = await Student.find().sort({ createdAt: -1 }).limit(7);
+        res.status(200).json(students);
+    } catch (error) {
+        console.error("Error retrieving recent students:", error);
+        res.status(500).json({ message: "Error retrieving recent students" });
+    }
+};

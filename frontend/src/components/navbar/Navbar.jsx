@@ -1,6 +1,28 @@
 import './navbar.scss';
-import { logo, app, search, expand, setting, notification, profilePic } from "../../assets/image.js";
+import { logo, app, search, expand, notification, profilePic } from "../../assets/image.js";
+import { FiLogOut } from 'react-icons/fi';
+import { useLogOutMutation } from '../../features/auth/AuthApiSlice.jsx';
+import { useNavigate } from 'react-router-dom';
+import { persistor } from '../../Store.jsx';
+import { useGetCurrentUserQuery } from '../../features/users/userApiSlice.jsx';
+
 const Navbar = () => {
+  const [logOut] = useLogOutMutation();
+  const { data: currentUser, isLoading, error, refetch } = useGetCurrentUserQuery();
+
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    try {
+      await logOut().unwrap();
+      navigate('/login');
+      localStorage.clear();
+      persistor.purge();
+    } catch (error) {
+      console.error("Logout failed:", error);
+    }
+  };
+
   return (
     <div className='navBar'>
       <div className="logo">
@@ -17,12 +39,14 @@ const Navbar = () => {
         </div>
         <div className="user">
           <img src={profilePic} alt="" />
-          <span>Akash T B</span>
+          <span>{`${currentUser?.firstName} ${currentUser?.lastName}`}</span>
         </div>
-        <img src={setting} alt="" className='Icon' />
+        <div className="logout" onClick={handleLogout}>
+          <FiLogOut className='Icon' style={{ cursor: 'pointer', fontSize: '24px' }} />
+        </div>
       </div>
     </div>
   )
 }
 
-export default Navbar
+export default Navbar;

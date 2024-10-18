@@ -194,3 +194,13 @@ export const deleteUser = async (req, res, next) => {
         next(error);
     }
 };
+
+export const getRecentUser = async (req, res) => {
+    try {
+        const students = await User.find().sort({ createdAt: -1 }).limit(7);
+        res.status(200).json(students);
+    } catch (error) {
+        console.error("Error retrieving recent students:", error);
+        res.status(500).json({ message: "Error retrieving recent students" });
+    }
+};

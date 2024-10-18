@@ -1,21 +1,55 @@
 import './menu.scss'
 import { Link } from "react-router-dom"
-import { menu } from '../../data';
+import { useSelector } from 'react-redux';
+import { selectCurrentRole } from '../../features/auth/AuthSLice';
+import { homeIcon, profile, user } from '../../assets/image';
 
 const Menu = () => {
+  const role = useSelector(selectCurrentRole);
+  console.log(role);
+  
   return (
     <div className="menu">
-    {menu.map((item) => (      
-      <div className="item" key={item.id}>
-        <span className="title">{item.title}</span>
-        {item.listItems.map((listItem) => (
-          <Link to={listItem.url} className="listItem" key={listItem.id}>
-            <img src={listItem.icon} alt="" />
-            <span className="listItemTitle">{listItem.title}</span>
+          
+      <div className="item">
+        <span className="title">Main</span>
+          <Link to="/home" className="listItem" >
+            <img src={homeIcon} alt="" />
+            <span className="listItemTitle">Home Page</span>
           </Link>
-        ))}
+          <Link to="/myProfile" className="listItem" >
+            <img src={profile} alt="" />
+            <span className="listItemTitle">Profile</span>
+          </Link>
+
       </div>
-    ))}
+      <div className="item">
+        <span className="title">List</span>
+          <Link to="/users" className="listItem" >
+            <img src={user} alt="" />
+            <span className="listItemTitle">User List</span>
+          </Link>
+          <Link to="/students" className="listItem" >
+            <img src={user} alt="" />
+            <span className="listItemTitle">Student List</span>
+          </Link>
+          
+      </div>
+  
+      <div className="item">
+        <span className="title">Record History</span>
+          <Link to="/feeHistory" className="listItem" >
+            <img src={homeIcon} alt="" />
+            <span className="listItemTitle">Fees History</span>
+          </Link>
+          <Link to="/libraryHistory" className="listItem" >
+            <img src={user} alt="" />
+            <span className="listItemTitle">Library History</span>
+          </Link>
+          
+      </div>
+  
+  
   </div>
   )
 }

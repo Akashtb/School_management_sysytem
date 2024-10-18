@@ -16,29 +16,13 @@ import StudentView from './pages/studentView/StudentView';
 import FeeHistory from './pages/FeesHistory/FeeHistory';
 import LibraryHistory from './pages/LibraryHistory/LibraryHistory';
 import RequireAuth from './features/auth/RequireAuth';
-import Welcome from './features/auth/Welcome';
 import SingleLibrary from './pages/SingleLibraryHistory/SingleLibrary';
 import SingleFee from './pages/SingleFeeHistory/SingleFee';
 import Edit from './components/StudentEdit/StudentEdit';
 import EditLibrary from './components/EditLibrary/EditLibrary';
 import EditProfile from './pages/EditProfile/EditProfile';
 
-function Layout() {
-  return (
-    <div className="main">
-      <Navbar />
-      <div className="container">
-        <div className="menuContainer">
-          <Menu />
-        </div>
-        <div className="contentContainer">
-          <Outlet />
-        </div>
-      </div>
-      <Footer />
-    </div>
-  );
-}
+
 
 function App() {
   const router = createBrowserRouter([
@@ -48,10 +32,6 @@ function App() {
         {
           path: "/home",
           element: <Home />
-        },
-        {
-          path: "/welcome",
-          element: <Welcome />
         },
         {
           path: "/users",

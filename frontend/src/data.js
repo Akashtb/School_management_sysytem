@@ -1,60 +1,61 @@
 import { backup, calendar, chart, element, form, homeIcon, note, order, post2, product, profile,setting, user,revenueIcon } from './assets/image.js'
 export const menu = [
-    {
-      id: 1,
-      title: "main",
-      listItems: [
-        {
-          id: 1,
-          title: "Homepage",
-          url: "/home",
-          icon: {homeIcon},
-        },
-        {
-          id: 2,
-          title: "Profile",
-          url: "/myProfile",
-          icon: {profile},
-        },
-      ],
-    },
-    {
-      id: 2,
-      title: "lists",
-      listItems: [
-        {
-          id: 1,
-          title: "Users",
-          url: "/users",
-          icon: {user},
-        },
-        {
-          id: 2,
-          title: "Students",
-          url: "/students",
-          icon: {product},
-        }
-      ],
-    },
-    {
-      id: 3,
-      title: "Record History",
-      listItems: [
-        {
-          id: 1,
-          title: "Fee History",
-          url: "/feeHistory",
-          icon: {element},
-        },
-        {
-          id: 2,
-          title: "Library History",
-          url: "/libraryHistory",
-          icon: {note},
-        }
-      ],
-    }
-  ];
+  {
+    id: 1,
+    title: "main",
+    listItems: [
+      {
+        id: 1,
+        title: "Homepage",
+        url: "/home",
+        icon: { homeIcon },
+      },
+      {
+        id: 2,
+        title: "Profile",
+        url: "/myProfile",
+        icon: { profile },
+      },
+    ],
+  },
+  {
+    id: 2,
+    title: "lists",
+    listItems: [
+      {
+        id: 1,
+        title: "Users",
+        url: "/users",
+        icon: { user },
+      },
+      {
+        id: 2,
+        title: "Students",
+        url: "/students",
+        icon: { product },
+      },
+    ],
+  },
+  {
+    id: 3,
+    title: "Record History",
+    listItems: [
+      {
+        id: 1,
+        title: "Fee History",
+        url: "/feeHistory",
+        icon: { element },
+      },
+      {
+        id: 2,
+        title: "Library History",
+        url: "/libraryHistory",
+        icon: { note },
+      },
+    ],
+  },
+];
+
   
   export const topDealUsers = [
     {
