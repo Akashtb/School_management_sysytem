@@ -1,9 +1,15 @@
-import LibraryHistory from '../models/LibraryHistory.js';
-import createError from '../utils/error.js';
+import LibraryHistory from '../models/Library.js';
+import { createError } from '../utils/error.js';
 
 export const createLibraryRecord = async (req, res, next) => {
     try {
-        const newLibraryRecord = new LibraryHistory(req.body);
+        const { studentId } = req.params;
+
+        const newLibraryRecord = new LibraryHistory({
+            ...req.body, 
+            studentId 
+        });
+
         await newLibraryRecord.save();
         res.status(201).json({ message: "Library record created successfully", data: newLibraryRecord });
     } catch (error) {
@@ -14,9 +20,9 @@ export const createLibraryRecord = async (req, res, next) => {
 
 export const getAllLibraryRecordsOfAStudent = async (req, res, next) => {
     try {
-        const { studentId } = req.query; 
+        const { studentId } = req.params; 
         const filters = studentId ? { studentId } : {};
-        const libraryRecords = await LibraryHistory.find(filters).populate('studentId', 'firstName lastName');
+        const libraryRecords = await LibraryHistory.find(filters)
         res.status(200).json(libraryRecords);
     } catch (error) {
         console.error('Error fetching library records:', error);

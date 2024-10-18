@@ -2,30 +2,30 @@ import { useEffect, useState } from 'react';
 import './student.scss';
 import DataTable from '../../components/dataTable/dataTable';
 import Add from '../../components/Add/Add';
-import { studentDetails } from '../../data';
-import { useGetUsersQuery } from '../../features/users/userApiSlice';
-import StudentEdit from '../../components/StudentEdit/StudentEdit';
+import { useGetAllStudentsQuery } from '../../features/users/studentApiSlice';
+import { noAvatar } from '../../assets/image';
+import Edit from '../../components/StudentEdit/StudentEdit';
+
 const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
     {
-        field: 'Avatar',
+        field: 'avatar',
         headerName: 'Avatar',
         width: 80,
         renderCell: (params) => {
-            return <img src={params?.row?.img || ''} alt="avatar" />;
+            return <img src={params?.row?.avatar || noAvatar}  />;
         }
     },
     {
         field: 'firstName',
         headerName: 'First Name',
-        type:'text',
+        type: 'text',
         width: 120,
         editable: true,
     },
     {
         field: 'lastName',
         headerName: 'Last Name',
-        type:'text',
+        type: 'text',
         width: 120,
         editable: true,
     },
@@ -51,13 +51,13 @@ const columns = [
               });
             }}
           >
-            <option value="">Select</option> // Placeholder option
+            <option value="">Select</option> 
             <option value="Male">Male</option>
             <option value="Female">Female</option>
             <option value="Other">Other</option>
           </select>
         ),
-      },
+    },
     {
         field: 'dateOfBirth',
         headerName: 'Date of Birth',
@@ -65,8 +65,10 @@ const columns = [
         type: 'date',
         editable: false,
         valueFormatter: (params) => {
-            const date = new Date(params);
-            return !isNaN(date.getTime()) ? date.toLocaleDateString() : '';
+          console.log(params);
+          
+          const date = new Date(params);
+          return !isNaN(date.getTime()) ? date.toLocaleDateString() : '';
         },
     },
     {
@@ -85,70 +87,60 @@ const columns = [
             }}
           >
             <option value="">Select</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-            <option value="11">11</option>
-            <option value="12">12</option>
+            {[...Array(12)].map((_, i) => (
+              <option key={i + 1} value={`${i + 1} Class`}>{i + 1}</option>
+            ))}
           </select>
         ),
-      },
+    },
     {
         field: 'enrollmentDate',
         headerName: 'Enrollment Date',
         width: 130,
-        type: 'date',
         editable: false,
-        valueFormatter: (params) => {
-            const date = new Date(params);
-            return !isNaN(date.getTime()) ? date.toLocaleDateString() : '';
-        },
+       
     }, 
     {
         field: 'guardianName',
         headerName: 'Guardian Name',
-        type:'text',
+        type: 'text',
         width: 180,
         editable: true,
     },
     {
-        field: 'guardianContact',
+        field: 'guardianContactNumber',
         headerName: 'Guardian Contact',
-        type:'text',
+        type: 'text',
         width: 180,
         editable: true,
     },
     {
         field: 'guardianRelationship',
         headerName: 'Guardian Relationship',
-        type:'text',
+        type: 'text',
         width: 180,
         editable: true,
     },
     {
         field: 'guardianEmail',
         headerName: 'Guardian Email',
-        type:'text',
+        type: 'text',
         width: 180,
         editable: true,
     },
-
 ];
-
 
 const Student = () => {
   const [open, SetOpen] = useState(false);  
   const [openEdit, SetOpenEdit] = useState(false);
-  const [selectedRow, setSelectedRow] = useState(null); 
-  const { data: users, error, isLoading } = useGetUsersQuery();
-  console.log(users);
+  const [selectedRow, setSelectedRow] = useState(null);
+  const { data: students, isLoading, isError ,refetch} = useGetAllStudentsQuery(); 
+
+  console.log(students);
+  
+  useEffect(()=>{
+    refetch()
+  },[])
 
   const handleOpenEdit = (isOpen, rowData = null) => {
       SetOpenEdit(isOpen);
@@ -161,11 +153,11 @@ const Student = () => {
               <h1>Students</h1>
               <button onClick={() => SetOpen(true)}>Add New Student</button>
           </div>
-          <DataTable slug="students" columns={columns} rows={studentDetails} SetOpenEdit={handleOpenEdit} />
-          {open && <Add slug="students" columns={columns} SetOpen={SetOpen} />}
-          {openEdit && <StudentEdit slug="students" columns={columns} SetOpenEdit={handleOpenEdit} rowData={selectedRow} />} {/* Pass the selected rowData */}
+          <DataTable slug="students" columns={columns} rows={students} SetOpenEdit={handleOpenEdit} refetch={refetch} />
+          {open && <Add slug="students" columns={columns} SetOpen={SetOpen} refetch={refetch}/>}
+          {openEdit && <Edit slug="students" columns={columns} SetOpenEdit={handleOpenEdit} rowData={selectedRow} refetch={refetch} />}
       </div>
-  ) 
+  ); 
 }
 
 export default Student;

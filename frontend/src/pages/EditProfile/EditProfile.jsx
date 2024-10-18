@@ -1,36 +1,44 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './EditProfile.scss';
 import { AiOutlineCamera } from 'react-icons/ai';
+import { useGetCurrentUserQuery, useUpdateCurrentUserMutation } from '../../features/users/userApiSlice';
+import { toast } from 'react-toastify';
+import axios from 'axios';
 
 const EditProfile = () => {
+    const { data: currentUser, isLoading, error, refetch } = useGetCurrentUserQuery();
+    const [updateCurrentUser] = useUpdateCurrentUserMutation();
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
         email: '',
-        phoneNumber: '',
         bio: '',
         age: '',
         qualification: '',
-        password: '',
     });
     const [image, setImage] = useState(null);
-    const [errors, setErrors] = useState({}); // State for validation errors
+    const [errors, setErrors] = useState({});
+
+    useEffect(() => {
+        if (currentUser) {
+            setFormData({
+                firstName: currentUser.firstName || '',
+                lastName: currentUser.lastName || '',
+                email: currentUser.email || '',
+                bio: currentUser.bio || '',
+                age: currentUser.age || '',
+                qualification: currentUser.qualification || '',
+            });
+            if (currentUser.avatar) {
+                setImage(currentUser.avatar);
+            }
+        }
+    }, [currentUser]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setFormData({ ...formData, [name]: value });
-        setErrors({ ...errors, [name]: '' }); // Clear error on change
-    };
-
-    const handleImageChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImage(reader.result);
-            };
-            reader.readAsDataURL(file);
-        }
+        setErrors({ ...errors, [name]: '' });
     };
 
     const validateEmail = (email) => {
@@ -38,16 +46,26 @@ const EditProfile = () => {
         return emailRegex.test(email);
     };
 
-    const validatePassword = (password) => {
-        return password.length >= 6; // Minimum length for password
+    const handleImageChange = async (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const formData = new FormData();
+            formData.append('file', file);
+            uploadData.append('upload_preset', 'upload'); 
+
+            try {
+                const response = await axios.post('https://api.cloudinary.com/v1_1/dwtoizfsv/image/upload', uploadData);
+                const imageUrl = response.data.secure_url;
+                setImage(imageUrl);
+                toast.success('Image uploaded successfully');
+            } catch (error) {
+                console.error('Error uploading image to Cloudinary:', error);
+                toast.error('Failed to upload image. Please try again.');
+            }
+        }
     };
 
-    const validatePhoneNumber = (phoneNumber) => {
-        const phoneRegex = /^\d{10}$/; // Example: Validate for 10-digit phone numbers
-        return phoneRegex.test(phoneNumber);
-    };
-
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const newErrors = {};
 
@@ -55,20 +73,19 @@ const EditProfile = () => {
             newErrors.email = 'Please enter a valid email address.';
         }
 
-        if (!validatePassword(formData.password)) {
-            newErrors.password = 'Password must be at least 6 characters long.';
-        }
-
-        if (!validatePhoneNumber(formData.phoneNumber)) {
-            newErrors.phoneNumber = 'Phone number must be 10 digits long.';
-        }
-
         if (Object.keys(newErrors).length > 0) {
             setErrors(newErrors);
-            return; // Stop submission if there are errors
+            return;
         }
 
-        console.log('Profile updated:', formData, image);
+        try {
+            await updateCurrentUser({ ...formData, avatar: image }).unwrap();
+            refetch();
+            toast.success('Successfully updated');
+        } catch (err) {
+            console.error('Failed to update profile:', err);
+            toast.error('Something went wrong. Check your connection.');
+        }
     };
 
     return (
@@ -137,18 +154,6 @@ const EditProfile = () => {
                     />
                 </div>
                 <div className="form-group">
-                    <label htmlFor="phoneNumber">Phone Number</label>
-                    <input
-                        type="tel"
-                        id="phoneNumber"
-                        name="phoneNumber"
-                        value={formData.phoneNumber}
-                        onChange={handleChange}
-                        required
-                    />
-                    {errors.phoneNumber && <p className="error">{errors.phoneNumber}</p>}
-                </div>
-                <div className="form-group">
                     <label htmlFor="qualification">Qualification</label>
                     <input
                         type="text"
@@ -158,18 +163,6 @@ const EditProfile = () => {
                         onChange={handleChange}
                         required
                     />
-                </div>
-                <div className="form-group">
-                    <label htmlFor="password">Password</label>
-                    <input
-                        type="password"
-                        id="password"
-                        name="password"
-                        value={formData.password}
-                        onChange={handleChange}
-                        required
-                    />
-                    {errors.password && <p className="error">{errors.password}</p>}
                 </div>
                 <button type="submit" className="submit-button">Update Profile</button>
             </form>

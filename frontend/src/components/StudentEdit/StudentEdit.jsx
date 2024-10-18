@@ -1,30 +1,54 @@
 import { useState, useEffect } from 'react';
 import { FaCamera } from 'react-icons/fa';
+import axios from 'axios';
 import './Edit.scss';
+import { toast } from 'react-toastify';
+import { useUpdateStudentDetailMutation } from '../../features/users/studentApiSlice';
 
 const Edit = (props) => {
-    const [image, setImage] = useState(null);
     const [preview, setPreview] = useState(null);
-    const [formData, setFormData] = useState({}); 
+    const [formData, setFormData] = useState({});
+    const [updateStudentDetail] = useUpdateStudentDetailMutation(); 
 
-   
     useEffect(() => {
         if (props.rowData) {
-            setFormData(props.rowData); 
+            const { dateOfBirth, ...rest } = props.rowData;
+            const formattedDateOfBirth = dateOfBirth ? new Date(dateOfBirth).toISOString().split('T')[0] : '';
+            setFormData({ ...rest, dateOfBirth: formattedDateOfBirth });
+            if (props.rowData.avatar) {
+                setPreview(props.rowData.avatar);
+            }
         }
     }, [props.rowData]);
 
-    const handleSubmit = (e) => { 
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        console.log(formData);
-        props.SetOpenEdit(false); 
+        try {
+            await updateStudentDetail({ id: props.rowData._id, studentData: formData }).unwrap(); 
+            toast.success("Successfully updated student details");
+            props.refetch();
+            props.SetOpenEdit(false); 
+        } catch (error) {
+            console.error('Failed to update student: ', error);
+        }
     };
 
-    const handleImageChange = (e) => {
+    const handleImageChange = async (e) => {
         const file = e.target.files[0];
         if (file) {
-            setImage(file);
-            setPreview(URL.createObjectURL(file));
+            const uploadData = new FormData();
+            uploadData.append('file', file);
+            uploadData.append('upload_preset', 'upload');
+
+            try {
+                const response = await axios.post('https://api.cloudinary.com/v1_1/dwtoizfsv/image/upload', uploadData);
+                const imageUrl = response.data.secure_url;
+
+                setFormData((prevData) => ({ ...prevData, avatar: imageUrl }));
+                setPreview(imageUrl);
+            } catch (error) {
+                console.error("Error uploading image to Cloudinary:", error);
+            }
         }
     };
 
@@ -38,7 +62,7 @@ const Edit = (props) => {
     return (
         <div className='Edit'>
             <div className="modal">
-                <span className="close" onClick={() => props.SetOpenEdit(false)}>X</span> 
+                <span className="close" onClick={() => props.SetOpenEdit(false)}>X</span>
                 <h1>Edit {props.slug}</h1>
                 <form onSubmit={handleSubmit}>
                     <div className="avatar-container">
@@ -46,7 +70,7 @@ const Edit = (props) => {
                             type="file"
                             accept="image/*"
                             onChange={handleImageChange}
-                            style={{ display: 'none' }}
+                            style={{ display: 'none' }} 
                             id="avatar-input"
                         />
                         <div
@@ -72,8 +96,9 @@ const Edit = (props) => {
                                     <div className="input-item" key={column.field}>
                                         <select
                                             name="gender"
-                                            value={formData.gender || ''} 
+                                            value={formData.gender || ''}
                                             onChange={handleInputChange}
+                                            required
                                         >
                                             <option value="" disabled>Select Gender</option>
                                             <option value="Male">Male</option>
@@ -89,39 +114,54 @@ const Edit = (props) => {
                                     <div className="input-item" key={column.field}>
                                         <select
                                             name="class"
-                                            value={formData.class || ''} 
+                                            value={formData.class || ''}
                                             onChange={handleInputChange}
+                                            required
                                         >
                                             <option value="" disabled>Select Class</option>
-                                            {[...Array(12)?.keys()]?.map((num) => (
-                                                <option key={num + 1} value={num + 1}>{num + 1}</option>
+                                            {[...Array(12)].map((_, i) => (
+                                                <option key={i + 1} value={`${i + 1} Class`}>{i + 1}</option>
                                             ))}
                                         </select>
                                     </div>
                                 );
                             }
 
-                            return (
-                                column.field !== "Avatar" && (
+                            if (column.field === 'dateOfBirth') {
+                                return (
                                     <div className="input-item" key={column.field}>
                                         <input
-                                            type={column.type || 'text'} 
+                                            type="date"
+                                            name="dateOfBirth"
+                                            value={formData.dateOfBirth || ''}
+                                            onChange={handleInputChange}
+                                            required
+                                        />
+                                    </div>
+                                );
+                            }
+
+                            return (
+                                column.field !== "avatar" && column.field !== "enrollmentDate" && (
+                                    <div className="input-item" key={column.field}>
+                                        <input
+                                            type={column.type || 'text'}
                                             name={column.field}
                                             placeholder={column.headerName || column.field}
                                             value={formData[column.field] || ''}
                                             onChange={handleInputChange}
+                                            required
                                         />
                                     </div>
                                 )
                             );
                         })}
                     </div>
-
-                    <button>Submit</button>
+                    <button type="submit">Update</button>
                 </form>
             </div>
         </div>
     );
-};
+}
 
 export default Edit;

@@ -5,9 +5,9 @@ import { useParams } from 'react-router-dom';
 import { FeesHistory } from '../../data';
 import './Single.scss';
 import EditFee from '../../components/EditFees/EditFee';
+import { useGetAllFeesRecordsOfAStudentQuery } from '../../features/users/feeSliceApi';
 
 const columns = [
-  { field: 'studentId', headerName: 'ID', width: 90 },
   {
     field: 'feeType',
     headerName: 'Fee Type',
@@ -21,7 +21,7 @@ const columns = [
     width: 260,
     editable: true,
     valueGetter: (params) => {
-      return new Date(params.value);
+      return new Date(params);
     },
   },
   {
@@ -31,7 +31,7 @@ const columns = [
     editable: true,
   },
   {
-    field: 'status',
+    field: 'feeStatus',
     headerName: 'Status',
     width: 100,
     editable: true,
@@ -40,10 +40,10 @@ const columns = [
         defaultValue={params.value}
         style={{ width: '100%', height: '100%' }}
         onChange={(e) => {
-          params.api.updateRowData({
-            update: [{ ...params.row, status: e.target.value }],
-          });
+          const updatedRow = { ...params.row, feeStatus: e.target.value }; 
+          params.api.updateRowData({ update: [updatedRow] }); 
         }}
+        required
       >
         <option value="">Select</option>
         <option value="Cleared">Cleared</option>
@@ -61,37 +61,38 @@ const columns = [
 
 const SingleFee = () => {
   const { id } = useParams();
-  const [open, SetOpen] = useState(false);
-  const [openEdit, SetOpenEdit] = useState(false);
+  const [open, setOpen] = useState(false);
+  const [openEdit, setOpenEdit] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null);
-  const [data, SetData] = useState([]);
+  const { data: feesRecords, error, isLoading,refetch } = useGetAllFeesRecordsOfAStudentQuery(id);
+  const [data, setData] = useState([]);
 
   useEffect(() => {
     const numericId = parseInt(id, 10);
     const findFeeHistory = FeesHistory.filter((user) => user.studentId === numericId);
-    SetData(findFeeHistory);
+    setData(findFeeHistory);
   }, [id]);
 
   const handleEditRow = (row) => {
     setSelectedRow(row);
-    SetOpenEdit(true);
+    setOpenEdit(true);
   };
 
   return (
     <div className='SingleFee'>
       <div className="info">
         <h1>Student Fees History</h1>
-        <button onClick={() => SetOpen(true)}>Add New Fees</button>
+        <button onClick={() => setOpen(true)}>Add New Fees</button>
       </div>
       <SingleData
-        slug="StudentLibrary"
+        slug="Fee"
         columns={columns}
-        rows={data}
-        onEditRow={handleEditRow} // Assuming your SingleData component handles editing
-      />  
-      {open && <AddHistory slug="Fee" columns={columns} SetOpen={SetOpen} />}
-      {openEdit && <EditFee slug="Fee" columns={columns} SetOpenEdit={SetOpenEdit} selectedRow={selectedRow} />}
-
+        rows={feesRecords}
+        onEditRow={handleEditRow}
+        refetch={refetch}
+      />
+      {open && <AddHistory slug="Fee" columns={columns} setOpen={setOpen} refetch={refetch} id={id} />}
+      {openEdit && <EditFee slug="Fee" columns={columns} setOpenEdit={setOpenEdit} selectedRow={selectedRow} refetch={refetch} />}
     </div>
   );
 };

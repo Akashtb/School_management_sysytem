@@ -1,17 +1,17 @@
 import DataTable from '../../components/dataTable/dataTable';
 import RecordList from '../../components/RecordList/RecordList';
 import { studentDetails } from '../../data';
+import { useGetAllStudentsQuery } from '../../features/users/studentApiSlice';
 import './FeeHistory.scss';
 import { useState } from 'react';
 
 const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
     {
-        field: 'Avatar',
+        field: 'avatar',
         headerName: 'Avatar',
         width: 80,
         renderCell: (params) => {
-            return <img src={params?.row?.img || ''} alt="avatar" />;
+            return <img src={params?.row?.avatar || ''} alt="avatar" />;
         }
     },
     {
@@ -67,15 +67,17 @@ const columns = [
             return !isNaN(date.getTime()) ? date.toLocaleDateString() : '';
         },
     }, 
-];
+]; 
 
 const FeeHistory = () => {
+    const { data: students, isLoading, isError ,refetch} = useGetAllStudentsQuery(); 
+
   return (
     <div className='FeeHistory'>
           <div className="info">
                 <h1>Students</h1>
             </div>
-            <RecordList slug="students" columns={columns} rows={studentDetails} nav="singleFee"/>
+            <RecordList slug="students" columns={columns} rows={students} nav="singleFee"/>
     </div>
   )
 }

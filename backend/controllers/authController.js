@@ -4,24 +4,28 @@ import jwt from "jsonwebtoken";
 import { createError } from "../utils/error.js";
 
 export const registerUser = async (req, res,next) => {
-    const { firstName, lastName, age, qualification, username, email, password, role } = req.body;
+    const { firstName, lastName, age, qualification, email, password, role,avatar } = req.body;
 
-    if (!firstName || !lastName || !age || !qualification || !username || !email || !password || !role) {
+    if (!firstName || !lastName || !age || !qualification || !email || !password || !role) {
         return next(createError(400, "Please fill all the fields"))
     }
     try {
+        const existingUser = await User.findOne({ email });
+        if (existingUser) {
+            return next(createError(400, "Email is already registered. Please use a different email."));
+        }
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(password, salt);
 
         const newUser = new User(
             {
-                username,
                 password: hashedPassword,
                 role,
                 email,
                 firstName,
                 lastName,
                 age,
+                avatar,
                 qualification,
             }
         )
@@ -102,3 +106,91 @@ export const logOut = (req, res) => {
     res.status(200).json({ message: "logged out successfully" })
 }
 
+
+
+export const getAllUserExceptCurrentUser = async (req, res, next) => {
+    try {
+        const currentUserId = req.user.id; 
+        const users = await User.find({ _id: { $ne: currentUserId } });
+
+        const usersWithFullName = users.map(user => ({
+            ...user.toObject(),
+            fullName: `${user.firstName} ${user.lastName}`
+        }));
+
+        res.status(200).json(usersWithFullName);
+    } catch (error) {
+        next(error);
+    }
+};
+
+export const getUserById=async(req,res,next)=>{
+    try {
+        const userId = req.params.id;
+        const user = await User.findById(userId).select('-password');
+        res.status(200).json(user);
+    } catch (error) {
+        next(error)
+    }
+}
+
+export const getCurrentUser=async(req,res,next)=>{
+    try {
+        const userId = req.user.id;
+        const user = await User.findById(userId).select('-password');
+        res.status(200).json(user);
+    } catch (error) {
+        next(error)
+    }
+}
+
+
+export const updateCurrentUserDetails = async (req, res,next) => {
+    try { 
+        const updates = req.body; 
+        const user = await User.findByIdAndUpdate(req.user.id, updates, {
+            new: true, 
+            runValidators: true, 
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "User details updated successfully", user });
+    } catch (error) {
+      next()
+    }
+};
+
+export const updateUserDetails = async (req, res,next) => {
+    try {
+        const { id } = req.params; 
+        const updates = req.body; 
+
+        
+        const user = await User.findByIdAndUpdate(id, updates, {
+            new: true, 
+            runValidators: true, 
+        });
+
+        if (!user) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "User details updated successfully", user });
+    } catch (error) {
+      next()
+    }
+};
+
+export const deleteUser = async (req, res, next) => {
+    try {
+        const userId = req.params.id;
+        const deletedUser = await User.findByIdAndDelete(userId);
+        if (!deletedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+        res.status(200).json({ message: "User deleted successfully", deletedUser });
+    } catch (error) {
+        next(error);
+    }
+};

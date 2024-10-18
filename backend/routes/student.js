@@ -6,11 +6,11 @@ import { verifyAdmin } from "../utils/verifyToken.js";
 const router = express.Router();
 
 
-router.post('/createStudent',createStudent);
-router.get('/getAllStudents',verifyAdmin,getAllStudents);
-router.get('/getSingleStudent',verifyAdmin,getStudentsById);
-router.put('/updateStudentDetail',verifyAdmin,updateStudent);
-router.delete('/deleteStudent',verifyAdmin,deleteStudent);
+router.post('/createStudent',verifyAdmin,createStudent);
+router.get('/getAllStudents',getAllStudents);
+router.get('/getSingleStudent/:id',verifyAdmin,getStudentsById);
+router.put('/updateStudentDetail/:id',verifyAdmin,updateStudent);
+router.delete('/deleteStudent/:id',verifyAdmin,deleteStudent);
 
 
 export default router;

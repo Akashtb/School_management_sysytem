@@ -1,15 +1,15 @@
 import RecordList from '../../components/RecordList/RecordList';
 import { studentDetails } from '../../data';
+import { useGetAllStudentsQuery } from '../../features/users/studentApiSlice';
 import './libraryHistory.scss';
 
 const columns = [
-  { field: 'id', headerName: 'ID', width: 70 },
   {
-      field: 'Avatar',
+      field: 'avatar',
       headerName: 'Avatar',
       width: 80,
       renderCell: (params) => {
-          return <img src={params?.row?.img || ''} alt="avatar" />;
+          return <img src={params?.row?.avatar || ''} alt="avatar" />;
       }
   },
   {
@@ -67,12 +67,13 @@ const columns = [
   }, 
 ];
 const LibraryHistory = () => {
+    const { data: students, isLoading, isError ,refetch} = useGetAllStudentsQuery(); 
   return (
     <div className='LibraryHistory'>
                 <div className="info">
                 <h1>Students</h1>
             </div>
-            <RecordList slug="students" columns={columns} rows={studentDetails} nav="singleLibrary"/>
+            <RecordList slug="students" columns={columns} rows={students} nav="singleLibrary"/>
     </div>
   )
 }

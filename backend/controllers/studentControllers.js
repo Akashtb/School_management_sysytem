@@ -1,16 +1,26 @@
 import Student from "../models/Student.js";
 import { createError } from "../utils/error.js";
-
-export const createStudent = async(req,res,next)=>{
+import LibraryHistory from "../models/Library.js"
+import FeesHistory from "../models/FeesHistory.js"
+export const createStudent = async (req, res, next) => {
     try {
-        const newStudent = new Student(req.body);
+        const formattedEnrollmentDate = new Date().toISOString().split('T')[0];
+
+        const newStudent = new Student({
+            ...req.body,
+            enrollmentDate: formattedEnrollmentDate
+        });
         await newStudent.save();
-        res.status(201).json({message:"Student created successfully",data:newStudent});
+        const responseData = {
+            ...newStudent._doc,
+            enrollmentDate: newStudent.enrollmentDate 
+        };
+        res.status(201).json({ message: "Student created successfully", data: responseData });
     } catch (error) {
         console.error('Error creating student:', error);
         return next(createError(500, "failed to create student"));
     }
-}
+};
 
 
 export const getAllStudents = async(req,res,next)=>{

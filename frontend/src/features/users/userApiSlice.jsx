@@ -3,12 +3,54 @@ import { apiSlice } from "../../api/apiSlice"
 export const usersApiSlice = apiSlice.injectEndpoints({
     endpoints: builder => ({
         getUsers: builder.query({
-            query: () => '/student/getAllStudents', 
-            keepUnusedDataFor: 5,
-        })
+            query: () => '/auth/getAllUserExceptCurrentUser', 
+            keepUnusedDataFor: 0, 
+            refetchOnMountOrArgChange: true,
+        }),
+        getUserById: builder.query({
+            query: (id) => `/auth/getUserById/${id}`,
+        }),
+        getCurrentUser: builder.query({ 
+            query: () => '/auth/getCurrentUser',
+            keepUnusedDataFor: 0, 
+            refetchOnMountOrArgChange: true,
+        }),
+        updateUser: builder.mutation({
+            query: ({ id, ...updatedData }) => ({
+                url: `/auth/updateUser/${id}`,
+                method: 'PUT',
+                body: updatedData,
+            }),
+        }),
+        deleteUser: builder.mutation({
+            query: (id) => ({
+                url: `/auth/deleteUser/${id}`,
+                method: 'DELETE',
+            }),
+        }),
+        updateCurrentUser: builder.mutation({  
+            query: (updatedData) => ({
+                url: '/auth/updateCurrentUser',
+                method: 'PUT',
+                body: updatedData,
+            }),
+        }),
+        createUser: builder.mutation({ 
+            query: (newUserData) => ({
+                url: '/auth/createNewUser',
+                method: 'POST',
+                body: newUserData,
+            }),
+        }),
     })
 })
 
 export const {
-    useGetUsersQuery
+    useGetUsersQuery: useGetAllUsersExceptCurrentUserQuery,
+    useGetUserByIdQuery,
+    useGetCurrentUserQuery,
+    useUpdateCurrentUserMutation,
+    useUpdateUserMutation,
+    useDeleteUserMutation,
+    useCreateUserMutation
 } = usersApiSlice;

@@ -33,28 +33,33 @@ export const verifyAdmin = (req, res, next) => {
 
 
 
-  export const verifyOfficeStaff = (req, res, next) => {
-    verifyToken(req, res, () => {
-      if (req.user && req.user.role === "Office Staff") {
-        next()
-      } else {
-        return next(
-          createError(403, 'You are not an admin to perform this operation.')
-        )
-      }
-    })
-  }
+export const verifyOfficeStaff = (req, res, next) => {
+  verifyToken(req, res, () => {
+    if (req.user && (req.user.role === "Office Staff" || req.user.role === "Admin")) {
+      next(); 
+    } else {
+      return next(
+        createError(403, 'You are not authorized to perform this operation.')
+      );
+    }
+  });
+}
+
 
   export const verifyLibrarian = (req, res, next) => {
     verifyToken(req, res, () => {
-      if (req.user && req.user.role === "Librarian") {
-        next()
+      if (
+        req.user &&
+        (req.user.role === "Librarian" || req.user.role === "Office Staff" || req.user.role === "Admin")
+      ) {
+        console.log("success");
+        
+        next();
       } else {
-        return next(
-          createError(403, 'You are not an admin to perform this operation.')
-        )
+        return next(createError(403, 'You are not authorized to perform this operation.'));
       }
-    })
+    });
   }
+  
 
   

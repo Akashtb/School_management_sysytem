@@ -1,16 +1,17 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import DataTable from '../../components/dataTable/dataTable';
 import { userRows } from '../../data';
 import './user.scss';
 import Add from '../../components/Add/Add';
 import Edit from '../../components/StudentEdit/StudentEdit';
 import UserEdit from '../../components/UserEdit/UserEdit';
+import { useGetAllUsersExceptCurrentUserQuery } from '../../features/users/userApiSlice';
+import { noAvatar } from '../../assets/image';
 const columns = [
-  { field: 'id', headerName: 'ID', width: 90 },
   {
-    field: 'Avatar', headerName: 'Avatar', width: 80,
+    field: 'avatar', headerName: 'Avatar', width: 80,
     renderCell: (params) => {
-      return <img src={params.row.img || noAvatar} alt="" />
+      return <img src={params.row.avatar || noAvatar} alt="" />
     }
   },
   {
@@ -37,7 +38,7 @@ const columns = [
   {
     field: 'qualification',
     headerName: 'Qualification',
-    type: 'password',
+    type: 'text',
     width: 120,
     editable: true,
   },
@@ -68,10 +69,26 @@ const columns = [
   {
     field: 'role',
     headerName: 'Role',
-    type: 'text',
     width: 100,
     editable: true,
+    renderEditCell: (params) => (
+      <select
+        defaultValue={params.value} 
+        style={{ width: '100%', height: '100%' }} 
+        onChange={(e) => {
+          params.api.updateRowData({
+            update: [{ ...params.row, role: e.target.value }],
+          });
+        }}
+      >
+        <option value="" disabled>Select</option> 
+        <option value="Admin">Admin</option>
+        <option value="Office Staff">Office Staff</option>
+        <option value="Librarian">Librarian</option>
+      </select>
+    ),
   },
+  
 
   
 
@@ -81,6 +98,15 @@ const User = () => {
   const [open, SetOpen] = useState(false);  
   const [openEdit, SetOpenEdit] = useState(false);
   const [selectedRow, setSelectedRow] = useState(null); 
+  const { data: users, isLoading, isError ,refetch} = useGetAllUsersExceptCurrentUserQuery();
+
+  useEffect(() => {
+    refetch();
+}, []);
+
+  console.log(users);
+  
+
 
   const handleOpenEdit = (isOpen, rowData = null) => {
     SetOpenEdit(isOpen);
@@ -92,9 +118,9 @@ const User = () => {
         <h1>Users</h1>
         <button onClick={()=>SetOpen(true)}>Add New User</button>
       </div>
-      <DataTable slug="users" columns={columns} rows={userRows} SetOpenEdit={handleOpenEdit}/>
-      {open && <Add slug="user" columns={columns} SetOpen={SetOpen}/>}
-      {openEdit && <UserEdit slug="users" columns={columns} SetOpenEdit={handleOpenEdit} rowData={selectedRow} />} {/* Pass the selected rowData */}
+      <DataTable slug="users" columns={columns} rows={users} SetOpenEdit={handleOpenEdit} refetch={refetch}/>
+      {open && <Add slug="user" columns={columns} SetOpen={SetOpen} refetch={refetch}/>}
+      {openEdit && <UserEdit slug="users" columns={columns} SetOpenEdit={handleOpenEdit} rowData={selectedRow} refetch={refetch}/>} {/* Pass the selected rowData */}
     </div>
   )
 }

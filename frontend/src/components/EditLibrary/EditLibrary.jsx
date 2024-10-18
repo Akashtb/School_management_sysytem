@@ -1,58 +1,74 @@
 import React, { useEffect, useState } from 'react';
 import './EditLibrary.scss';
+import { useUpdateLibraryRecordOfAStudentMutation } from '../../features/users/librarySliceApi';
+import { toast } from 'react-toastify';
 
-const EditLibrary = ({ columns, slug, SetOpenEdit, selectedRow }) => {
+const EditLibrary = ({ columns, slug, setOpenEdit, selectedRow, refetch }) => {
   const [formData, setFormData] = useState({});
+  const [updateRecord, { isLoading }] = useUpdateLibraryRecordOfAStudentMutation();
 
   useEffect(() => {
-    setFormData(selectedRow);
+    if (selectedRow) {
+      const { borrowDate, returnDate, ...rest } = selectedRow;
+      setFormData({
+        ...rest,
+        borrowDate: borrowDate ? new Date(borrowDate).toISOString().substring(0, 10) : '',
+        returnDate: returnDate ? new Date(returnDate).toISOString().substring(0, 10) : '',
+      });
+    }
   }, [selectedRow]);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log(formData);
-    SetOpenEdit(false); 
-  };
-
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    const { name, type, value } = e.target; 
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: type === 'select-one' ? value : value, 
+    }));
+};
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await updateRecord({ id: formData._id, updatedRecord: { ...formData, status: "Returned" } }).unwrap();
+      refetch();
+      toast.success("Succefully updated the record")
+      setOpenEdit(false);
+    } catch (err) {
+      console.error('Failed to update the record: ', err);
+      toast.error("Failed to update the record")
+    }
   };
 
-  const renderInput = (column) => {
-    if (column.renderEditCell) {
-      return column.renderEditCell({ value: formData[column.field] || "", api: { updateRowData: handleInputChange }, row: formData });
-    }
-
-    return (
+  const renderInput = ({ field, headerName, type }) => (
+    <div className="input-item" key={field}>
+      <label>{headerName}</label>
       <input
-        type={column.type || "text"}
-        name={column.field}
-        placeholder={column.headerName}
-        value={formData[column.field] || ""}
+        type={type === 'date' ? 'date' : type}
+        name={field}
+        placeholder={headerName}
+        checked={type === 'checkbox' ? formData[field] : undefined}
+        value={type !== 'checkbox' ? formData[field] || '' : undefined}
         onChange={handleInputChange}
         style={{ width: '100%', height: '30px' }}
+        required={type !== 'checkbox'}
       />
-    );
-  };
+    </div>
+  );
 
   return (
     <div className='EditLibrary'>
       <div className="modal">
-        <span className="close" onClick={() => SetOpenEdit(false)}>X</span>
+        <span className="close" onClick={() => setOpenEdit(false)}>X</span>
         <h1>Edit {slug}</h1>
         <form onSubmit={handleSubmit}>
           <div className="OtherInputs">
-            {columns?.map((column) => (
-              column.field !== "studentId" && (
-                <div className="input-item" key={column.field}>
-                  <label>{column.headerName}</label>
-                  {renderInput(column)}
-                </div>
-              )
-            ))}
+            {columns?.map((column) => 
+              column.field !== "studentId" && column.field !== "status" && renderInput(column)
+            )}
           </div>
-          <button type="submit">Submit</button>
+          <button type="submit" disabled={isLoading}>
+            Submit
+          </button>
         </form>
       </div>
     </div>

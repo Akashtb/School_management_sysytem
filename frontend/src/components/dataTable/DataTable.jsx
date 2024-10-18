@@ -2,15 +2,35 @@ import { AiOutlineDelete, AiOutlineEdit, AiOutlineEye } from 'react-icons/ai';
 import './datatable.scss';
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Link } from "react-router-dom";
+import { useDeleteUserMutation } from '../../features/users/userApiSlice';
+import { toast } from 'react-toastify';
+import { useDeleteStudentMutation } from '../../features/users/studentApiSlice';
 
 const DataTable = (props) => {
+    const [deleteUser] = useDeleteUserMutation();
+    const [deleteStudent] = useDeleteStudentMutation();
 
-    const handleDelete = (id) => {
-        console.log("ID has been deleted:", id);
-    }
+    const handleDelete = async (id) => {
+        try {
+            if(props.slug==="users"){
+                await deleteUser(id).unwrap();
+                props.refetch()
+                toast.success("User deleted successfully")
+            }
+            if(props.slug==="students"){
+                await deleteStudent(id).unwrap();
+                props.refetch()
+                toast.success("Student deleted successfully")
 
+            }
+           
+        } catch (error) {
+            console.error("Failed to delete the user: ", error);
+            toast.success("Something went wrong check the connection")
+        }
+    };
     const handleEditClick = (rowData) => {
-        props.SetOpenEdit(true, rowData); // Pass the row data to the parent component
+        props.SetOpenEdit(true, rowData); 
     };
 
     const actionColumn = {
@@ -21,7 +41,7 @@ const DataTable = (props) => {
             return (
                 <div className="action" style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
                     <div className='view'>
-                        <Link to={`/${props.slug}/view/${params.row.id}`}>
+                        <Link to={`/${props.slug}/view/${params.row._id}`}>
                             <AiOutlineEye size={20} style={{ cursor: 'pointer', color: '#007BFF' }} />
                         </Link>
                     </div>
@@ -29,10 +49,10 @@ const DataTable = (props) => {
                         <AiOutlineEdit 
                             size={20} 
                             style={{ cursor: 'pointer', color: '#28A745' }} 
-                            onClick={() => handleEditClick(params.row)} // Pass the row data when clicked
+                            onClick={() => handleEditClick(params.row)} 
                         />
                     </div>
-                    <div className='delete' onClick={() => handleDelete(params.row.id)}>
+                    <div className='delete' onClick={() => handleDelete(params.row._id)}>
                         <AiOutlineDelete size={20} style={{ cursor: 'pointer', color: '#DC3545' }} />
                     </div>
                 </div> 
@@ -48,6 +68,7 @@ const DataTable = (props) => {
                 className='dataGrid'
                 rows={props.rows}
                 columns={[...filteredColumns, actionColumn]}
+                getRowId={(row) => row._id}
                 initialState={{
                     pagination: {
                         paginationModel: {

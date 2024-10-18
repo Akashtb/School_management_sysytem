@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 
 const studentSchema = new mongoose.Schema({
+    avatar: { type: String},
     firstName: { type: String, required: true },
     lastName: { type: String, required: true },
     age: { type: Number, required: true },
@@ -8,7 +9,7 @@ const studentSchema = new mongoose.Schema({
     dateOfBirth: { type: Date, required: true },
     address: { type: String },
     class: { type: String, required: true },
-    enrollmentDate: { type: Date, default: Date.now },
+    enrollmentDate: { type: String },
     guardianName: { type: String, required: true },
     guardianRelationship: { type: String, required: true },
     guardianContactNumber: { type: String, required: true },

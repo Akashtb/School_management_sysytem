@@ -6,15 +6,16 @@ const RecordList = (props) => {
     const navigate = useNavigate();
 
     const handleRowClick = (params) => {
-        navigate(`/${props.nav}/${params.row.id}`);
+        navigate(`/${props.nav}/${params.row._id}`);
     };
-  return (
-    <div className='RecordList'>
-        <DataGrid
+    return (
+        <div className='RecordList'>
+            <DataGrid
                 className='dataGrid'
                 rows={props.rows}
                 columns={props.columns}
                 onRowClick={handleRowClick}
+                getRowId={(row) => row._id}
                 initialState={{
                     pagination: {
                         paginationModel: {
@@ -38,8 +39,8 @@ const RecordList = (props) => {
                 disableDensitySelector
                 disableColumnSelector
             />
-    </div>
-  )
+        </div>
+    )
 }
 
 export default RecordList 

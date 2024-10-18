@@ -6,6 +6,8 @@ import cookieParser from 'cookie-parser';
 import mongoose from "mongoose";
 import authRoute from "./routes/auth.js"
 import studentAuth from "./routes/student.js"
+import StudentLibrary from "./routes/library.js"
+import feesHistory from "./routes/feesHistory.js"
 
 const app = express()
 
@@ -33,6 +35,8 @@ mongoose.connect(process.env.MONGO_URL)
 
 app.use("/api/auth",authRoute);
 app.use("/api/student",studentAuth);
+app.use("/api/library",StudentLibrary)
+app.use("/api/studentFee",feesHistory);
 app.use((err, req, res, next) => {
     const errorStatus = err.status || 500;
     const errorMessage = err.message || "Something went Wrong"
