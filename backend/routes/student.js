@@ -10,7 +10,7 @@ const router = express.Router();
 router.post('/createStudent',verifyAdmin,createStudent);
 router.get('/getAllStudents',getAllStudents);
 router.get('/getRecentStudents',getRecentStudents);
-router.get('/getSingleStudent/:id',verifyAdmin,getStudentsById);
+router.get('/getSingleStudent/:id',getStudentsById);
 router.put('/updateStudentDetail/:id',verifyAdmin,updateStudent);
 router.delete('/deleteStudent/:id',verifyAdmin,deleteStudent);
 
