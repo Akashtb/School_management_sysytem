@@ -10,7 +10,7 @@ const LibraryMenu = () => {
           
     <div className="item">
       <span className="title">Main</span>
-        <Link to="/home" className="listItem" >
+        <Link to="/" className="listItem" >
           <img src={homeIcon} alt="" />
           <span className="listItemTitle">Home Page</span>
         </Link>

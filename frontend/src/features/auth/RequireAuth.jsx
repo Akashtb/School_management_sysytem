@@ -28,7 +28,7 @@ const RequireAuth = ({ allowedRoles }) => {
 
     if (!allowedRoles.includes(role)) {
         toast.error("Your are authorized to the route")
-        return <Navigate to="/home" replace />;
+        return <Navigate to="/" replace />;
     }
 
     return (

@@ -20,7 +20,7 @@ const router = createBrowserRouter([
   {
     element: <RequireAuth allowedRoles={['Admin', 'Office Staff', 'Librarian']} />,
     children: [
-      { path: "/home", element: <Home /> },
+      { path: "/", element: <Home /> },
       { path: "/students", element: <Student /> },
       { path: "/students/view/:id", element: <StudentView /> },
       { path: "/libraryHistory", element: <LibraryHistory /> },
@@ -31,7 +31,7 @@ const router = createBrowserRouter([
   {
     element: <RequireAuth allowedRoles={['Admin','Office Staff']} />,
     children: [
-      { path: "/home", element: <Home /> },
+      { path: "/", element: <Home /> },
       { path: "/students", element: <Student /> },
       { path: "/students/view/:id", element: <StudentView /> },
       { path: "/feeHistory", element: <FeeHistory /> },
@@ -44,7 +44,7 @@ const router = createBrowserRouter([
   {
     element: <RequireAuth allowedRoles={['Admin']} />,
     children: [
-      { path: "/home", element: <Home /> },
+      { path: "/", element: <Home /> },
       { path: "/users", element: <User /> },
       { path: "/students", element: <Student /> },
       { path: "/users/view/:id", element: <UserView /> },

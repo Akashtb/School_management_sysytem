@@ -47,7 +47,7 @@ const Login = () => {
         console.log(userData);
         
         dispatch(setCredentials({ ...userData }));
-        navigate('/home'); 
+        navigate('/'); 
       } catch (error) {
         setLoginError(error?.data?.message || 'Login failed, please try again.');
         console.error('Error logging in:', error);
