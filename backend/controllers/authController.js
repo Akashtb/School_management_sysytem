@@ -50,7 +50,7 @@ export const Login = async (req, res, next) => {
             role: user.role
         },
             process.env.JWT, {
-            expiresIn: '30m'
+            expiresIn: '15s'
         }
         )
         const { _id, password, ...otherDetails } = user._doc
@@ -86,6 +86,8 @@ export const refreshToken = (req, res, next) => {
         console.log("user data in refresh token", user);
 
         if (err) return next(createError(403, "Invalid refresh token"));
+        console.log(user,"user dataaaaaa");
+        
 
         const accessToken = jwt.sign(
             {
@@ -96,7 +98,7 @@ export const refreshToken = (req, res, next) => {
             { expiresIn: '15s' }
         );
 
-        res.status(200).json({ accessToken: accessToken });
+        res.status(200).json({ accessToken: accessToken,role:user.role });
         console.log(accessToken);
     });
 };

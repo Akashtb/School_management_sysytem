@@ -47,20 +47,19 @@ const AddHistory = ({ columns, slug, setOpen, refetch, id }) => {
     if (column.field === "feeStatus") {
       return (
         <select
-          name={column.field}
-          value={formData[column.field] || ""}
+          name="feeStatus"
           onChange={handleInputChange}
-          style={{ width: '100%', height: '30px'}} 
+          defaultValue=""
            required
         >
-          <option value="">Select Status</option>
+          <option value="" disabled>Select Status</option>
           <option value="Cleared">Cleared</option>
           <option value="Due">Due</option>
         </select>
       );
     }
 
-    return (
+    return ( 
       <input
         type={column.type || "text"}
         name={column.field}

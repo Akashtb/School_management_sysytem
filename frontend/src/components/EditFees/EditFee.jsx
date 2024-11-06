@@ -45,7 +45,7 @@ const EditFee = ({ columns, slug, setOpenEdit, selectedRow ,refetch}) => {
             name={column.field}
             value={formData[column.field] || ""}
             onChange={handleInputChange}
-            style={{ width: '100%', height: '30px'}} 
+            style={{ width: '100%', height: '33px'}} 
              required
           >
             <option value="">Select Status</option>

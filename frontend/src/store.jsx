@@ -18,9 +18,13 @@ const rootReducer = combineReducers({
 const persistedReducer = persistReducer(persistConfig, rootReducer);
 
 export const store = configureStore({
-    reducer: persistedReducer,
+    reducer: persistedReducer,  
     middleware: (getDefaultMiddleware) =>
-        getDefaultMiddleware().concat(apiSlice.middleware),
+        getDefaultMiddleware({
+            serializableCheck: {
+                ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE']
+            }
+        }).concat(apiSlice.middleware),
     devTools: true,
 });
 

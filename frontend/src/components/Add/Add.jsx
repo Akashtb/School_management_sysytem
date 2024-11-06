@@ -13,23 +13,23 @@ const Add = (props) => {
   const [createUser, { isLoading, error }] = useCreateUserMutation();
   const [createStudent] = useCreateStudentMutation();
 
-  
+
   useEffect(() => {
     if (props.rowData) {
-        const { dateOfBirth, ...rest } = props.rowData;
-        const formattedDateOfBirth = dateOfBirth ? new Date(dateOfBirth).toISOString().split('T')[0] : '';
-        setFormData({ ...rest, dateOfBirth: formattedDateOfBirth });
-        if (props.rowData.avatar) {
-            setPreview(props.rowData.avatar);
-        }
+      const { dateOfBirth, ...rest } = props.rowData;
+      const formattedDateOfBirth = dateOfBirth ? new Date(dateOfBirth).toISOString().split('T')[0] : '';
+      setFormData({ ...rest, dateOfBirth: formattedDateOfBirth });
+      if (props.rowData.avatar) {
+        setPreview(props.rowData.avatar);
+      }
     }
-}, [props.rowData]);
+  }, [props.rowData]);
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       if (props.slug === "user") {
-        console.log(formData,"formData");
-        
+        console.log(formData, "formData");
+
         await createUser(formData).unwrap();
         toast.success("New user created successfully");
         props.refetch();
@@ -52,17 +52,17 @@ const Add = (props) => {
     if (file) {
       const uploadData = new FormData();
       uploadData.append('file', file);
-      uploadData.append('upload_preset', 'upload'); 
+      uploadData.append('upload_preset', 'upload');
 
       try {
         const response = await axios.post('https://api.cloudinary.com/v1_1/dwtoizfsv/image/upload', uploadData);
         const imageUrl = response.data.secure_url;
         console.log(imageUrl);
-        
 
-        setImage(file); 
-        setPreview(imageUrl); 
-        setFormData((prevData) => ({ ...prevData, avatar: imageUrl })); 
+
+        setImage(file);
+        setPreview(imageUrl);
+        setFormData((prevData) => ({ ...prevData, avatar: imageUrl }));
       } catch (error) {
         console.error("Error uploading image to Cloudinary:", error);
         toast.error("Failed to upload image, please try again.");
@@ -75,7 +75,7 @@ const Add = (props) => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
 
-  const filteredColumns = props.columns.filter(column => column.field !== 'enrollmentDate' && column.field !== 'id' && column.field !== 'fullName'&& column.field !== 'avatar');
+  const filteredColumns = props.columns.filter(column => column.field !== 'enrollmentDate' && column.field !== 'id' && column.field !== 'fullName' && column.field !== 'avatar');
 
   return (
     <div className='add'>
@@ -140,8 +140,8 @@ const Add = (props) => {
                   <div className="input-item" key={column.field}>
                     <select name="class" onChange={handleInputChange} defaultValue="" required>
                       <option value="" disabled>Select Class</option>
-                      {[...Array(12).keys()].map((num) => (
-                        <option key={num + 1} value={num + 1}>{num + 1}</option>
+                      {[...Array(12)].map((_, i) => (
+                        <option key={i + 1} value={`${i + 1} Class`}>{i + 1}</option>
                       ))}
                     </select>
                   </div>

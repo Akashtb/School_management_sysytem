@@ -121,7 +121,7 @@ const Edit = (props) => {
                                             <option value="" disabled>Select Class</option>
                                             {[...Array(12)].map((_, i) => (
                                                 <option key={i + 1} value={`${i + 1} Class`}>{i + 1}</option>
-                                            ))}
+                                            ))} 
                                         </select>
                                     </div>
                                 );

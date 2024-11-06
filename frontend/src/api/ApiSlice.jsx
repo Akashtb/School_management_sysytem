@@ -28,7 +28,7 @@ const baseQueryWithReauth = async (args, api, extraOptions) => {
         console.log(refreshResult)
         if (refreshResult?.data) {
             const user = api.getState().auth.user
-            api.dispatch(setCredentials({ accessToken: refreshResult.data.accessToken, user }));
+            api.dispatch(setCredentials({ accessToken: refreshResult.data.accessToken, role:refreshResult.data.role }));
             result = await baseQuery(args, api, extraOptions)
         } else {
             api.dispatch(logOut())

@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useLoginMutation } from '../../features/auth/AuthApiSlice';
 import { setCredentials } from '../../features/auth/AuthSLice';
+import { toast } from 'react-toastify';
 const Login = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -47,6 +48,7 @@ const Login = () => {
         console.log(userData);
         
         dispatch(setCredentials({ ...userData }));
+        toast.success("successfully logged in ...")
         navigate('/'); 
       } catch (error) {
         setLoginError(error?.data?.message || 'Login failed, please try again.');

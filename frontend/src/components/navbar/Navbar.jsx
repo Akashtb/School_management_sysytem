@@ -5,6 +5,7 @@ import { useLogOutMutation } from '../../features/auth/AuthApiSlice.jsx';
 import { useNavigate } from 'react-router-dom';
 import { persistor } from '../../Store.jsx';
 import { useGetCurrentUserQuery } from '../../features/users/userApiSlice.jsx';
+import { toast } from 'react-toastify';
 
 const Navbar = () => {
   const [logOut] = useLogOutMutation();
@@ -16,6 +17,7 @@ const Navbar = () => {
     try {
       await logOut().unwrap();
       navigate('/login');
+      toast.success("successfully logged out ...")
       localStorage.clear();
       persistor.purge();
     } catch (error) {

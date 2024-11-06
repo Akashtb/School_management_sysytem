@@ -18,6 +18,12 @@ const RequireAuth = ({ allowedRoles }) => {
         return () => clearTimeout(timer);
     }, []);
 
+    useEffect(() => {
+        if (!allowedRoles.includes(role)) {
+            toast.error("You are not authorized to access this route");
+        }
+    }, [role, allowedRoles]);
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
@@ -27,12 +33,13 @@ const RequireAuth = ({ allowedRoles }) => {
     }
 
     if (!allowedRoles.includes(role)) {
-        toast.error("Your are authorized to the route")
         return <Navigate to="/" replace />;
     }
 
     return (
-       <Layout/>
+        <Layout>
+            <Outlet />
+        </Layout>
     );
 };
 
